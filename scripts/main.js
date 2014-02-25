@@ -85,6 +85,14 @@ $(document).ready(function(){
 			}
 		}
 
+		i.direction = function() {
+			if (i.x < 0) {
+				alienDirection = "right";
+			} else if (i.x > cWidth - i.width) {
+				alienDirection = "left";
+			}
+		}
+
 		return i;
 	}
 
@@ -168,13 +176,11 @@ $(document).ready(function(){
 		});
 
 		aliens.forEach(function(alien) {	// For each alien
-			if (alien.x < 0) {
-				alienDirection = "right";
-			} else if (alien.x > cWidth) {
-				alienDirection = "left";
-			}
-
 			alien.update();
+		});
+
+		aliens.forEach(function(alien) {
+			alien.direction();
 		});
 	}
 
