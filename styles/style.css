@@ -6,3 +6,7 @@ canvas, html {
 canvas {
 	margin: auto auto;
 }
+
+img {
+	display: none;
+}

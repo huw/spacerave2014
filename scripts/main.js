@@ -70,11 +70,10 @@ $(document).ready(function(){
 		i.width = 30;
 		i.height = 30;
 		i.color = "#F00";
-		i.speed = 5;
+		i.speed = 4;
 
 		i.draw = function() {
-			canvas.fillStyle = this.color;
-			canvas.fillRect(this.x, this.y, this.width, this.height);
+			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);
 		}
 
 		i.update = function() {
@@ -113,8 +112,7 @@ $(document).ready(function(){
 		height: 30,
 		speed : 5,
 		draw  : function() {
-			canvas.fillStyle = this.color;
-			canvas.fillRect(this.x, this.y, this.width, this.height);
+			canvas.drawImage(document.getElementById("ship"), this.x, this.y, this.width, this.height);
 		},
 		shoot : function() {
 			bullets.push(Bullet({
