@@ -37,21 +37,18 @@ $(document).ready(function(){
 	});
 
 	/****** DEFINE VARIABLES ******/
-	var bullets = [];
+	var bullets        = [];
+	var aliens         = [];
 	var bulletThrottle = false;
+	var alienDirection = "right";
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
 		
-		i.xVelocity = 0;
-		i.yVelocity = -i.speed;
+		i.speed     = 20;
 		i.width     = 2;
 		i.height    = 10;
 		i.color     = "#F09"
-
-		i.humanVisible = function() {
-			return i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
-		}
 
 		i.draw = function() {
 			canvas.fillStyle = this.color;
@@ -59,16 +56,48 @@ $(document).ready(function(){
 		}
 
 		i.update = function() {
-			i.x += i.xVelocity;
-			i.y += i.yVelocity;
+			i.y -= i.speed;
 
-			i.active = i.active && i.humanVisible();
+			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
 		}
 
 		return i;
 	}
 
-	var ship = {
+	function Alien(i) {	// Alien class constructor
+		i.active = true;
+
+		i.width = 30;
+		i.height = 30;
+		i.color = "#F00";
+		i.speed = 5;
+
+		i.draw = function() {
+			canvas.fillStyle = this.color;
+			canvas.fillRect(this.x, this.y, this.width, this.height);
+		}
+
+		i.update = function() {
+			if (alienDirection == "left") {
+				i.x -= i.speed;
+			} else if (alienDirection == "right") {
+				i.x += i.speed;
+			}
+		}
+
+		return i;
+	}
+
+	for (var y = 0; y < 3; y++) {
+		for (var x = 0; x < 10; x++) {	// Iterate through a 3x10 matrix, push aliens based on their positon here
+			aliens.push(Alien({
+				x: 40 + x * 80,
+				y: 40 + y * 80
+			}));
+		}
+	}
+
+	var ship = {	// Ship object constructor. It doesn't need to be a function
 		color : "#0BF",
 		x     : cWidth / 2,
 		y     : cHeight - 60,
@@ -137,6 +166,16 @@ $(document).ready(function(){
 		bullets = bullets.filter(function(bullet) {	// Cut bullet list down to just active bullets
 			return bullet.active;
 		});
+
+		aliens.forEach(function(alien) {	// For each alien
+			if (alien.x < 0) {
+				alienDirection = "right";
+			} else if (alien.x > cWidth) {
+				alienDirection = "left";
+			}
+
+			alien.update();
+		});
 	}
 
 	function draw() {
@@ -146,6 +185,10 @@ $(document).ready(function(){
 
 		bullets.forEach(function(bullet) {	// Draw the bullets
 			bullet.draw();
+		});
+
+		aliens.forEach(function(alien) {	// Draw the aliens
+			alien.draw();
 		});
 	}
 });
