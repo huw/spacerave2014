@@ -43,9 +43,6 @@ $(document).ready(function(){
 		draw  : function() {
 			canvas.fillStyle = this.color;
 			canvas.fillRect(this.x, this.y, this.width, this.height);
-		},
-		shoot : function() {
-			alert("#shotsfired");
 		}
 	}
 
@@ -65,9 +62,6 @@ $(document).ready(function(){
 
 		if (keydown.down || keydown.s) {
 			ship.y += ship.speed;
-		}
-
-		if (keydown.space) {
 		}
 
 		if (keydown.shift) {
