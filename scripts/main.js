@@ -41,14 +41,13 @@ $(document).ready(function(){
 	var aliens         = [];
 	var stars          = [];
 	var bulletThrottle = false;
-	var starThrottle   = false;
 	var alienDirection = "right";
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
 		
 		i.speed     = 20;
-		i.width     = 2;
+		i.width     = 4;
 		i.height    = 10;
 		i.color     = "#F09"
 
@@ -119,7 +118,7 @@ $(document).ready(function(){
 		shoot : function() {
 			bullets.push(Bullet({
 				speed: 20,
-				x    : this.x + this.width / 2,
+				x    : (this.x + this.width / 2) - Math.random() * 4,	// Quick random modifier for fun
 				y    : this.y
 			}));
 		}
@@ -132,7 +131,7 @@ $(document).ready(function(){
 		i.y = 0;
 		i.width = Math.random() * 4;
 		i.height = i.width;
-		i.speed = i.width * 5;
+		i.speed = 5 + (i.width * 5);
 		i.color = "#FFF";
 
 		i.draw = function() {
@@ -142,6 +141,8 @@ $(document).ready(function(){
 
 		i.update = function() {
 			i.y += i.speed;
+
+			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
 		}
 
 		return i;
@@ -208,6 +209,10 @@ $(document).ready(function(){
 		stars.forEach(function(star) {
 			star.update();
 		});
+
+		bullets = bullets.filter(function(bullet) {	// Cut star list down
+			return bullet.active;
+		});
 	}
 
 	function draw() {
@@ -223,14 +228,10 @@ $(document).ready(function(){
 			alien.draw();
 		});
 
-		stars.forEach(function(star) {
+		stars.forEach(function(star) {	// Draw the stars
 			star.draw();
 		});
 
-		if (starThrottle === false) {
-			stars.push(Star({}));
-			starThrottle = true;
-			setTimeout(function(){starThrottle = false;}, 20);
-		}
+		stars.push(Star({}));
 	}
 });
