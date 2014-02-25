@@ -39,7 +39,9 @@ $(document).ready(function(){
 	/****** DEFINE VARIABLES ******/
 	var bullets        = [];
 	var aliens         = [];
+	var stars          = [];
 	var bulletThrottle = false;
+	var starThrottle   = false;
 	var alienDirection = "right";
 
 	function Bullet(i) {	// Bullet class constructor
@@ -123,6 +125,28 @@ $(document).ready(function(){
 		}
 	}
 
+	function Star(i) {
+		i.active = true;
+
+		i.x = Math.random() * cWidth;
+		i.y = 0;
+		i.width = Math.random() * 4;
+		i.height = i.width;
+		i.speed = i.width * 5;
+		i.color = "#FFF";
+
+		i.draw = function() {
+			canvas.fillStyle = this.color;
+			canvas.fillRect(this.x, this.y, this.width, this.height);
+		}
+
+		i.update = function() {
+			i.y += i.speed;
+		}
+
+		return i;
+	}
+
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
 		if (keydown.left || keydown.a) {
@@ -180,6 +204,10 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {
 			alien.direction();
 		});
+
+		stars.forEach(function(star) {
+			star.update();
+		});
 	}
 
 	function draw() {
@@ -194,5 +222,15 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {	// Draw the aliens
 			alien.draw();
 		});
+
+		stars.forEach(function(star) {
+			star.draw();
+		});
+
+		if (starThrottle === false) {
+			stars.push(Star({}));
+			starThrottle = true;
+			setTimeout(function(){starThrottle = false;}, 20);
+		}
 	}
 });
