@@ -38,6 +38,7 @@ $(document).ready(function(){
 
 	/****** DEFINE VARIABLES ******/
 	var bullets        = [];
+	var alienBullets   = [];
 	var aliens         = [];
 	var stars          = [];
 	var bulletThrottle = false;
@@ -272,25 +273,28 @@ $(document).ready(function(){
 	}
 
 	function draw() {
-		canvas.clearRect(0, 0, cWidth, cHeight);	// Clear the canvas on each frame
+		/* Here drawing order is incredibly important.
+		First we have to clear the canvas, to prevent persistence.
+		Then we draw the background stars, *then* the ships,
+		and finally the bullets */
 
-		if (ship.state != "dead") {	// Draw the ship
+		canvas.clearRect(0, 0, cWidth, cHeight);
+
+		if (ship.state != "dead") {
 			ship.draw();
 		}
 
-		bullets.forEach(function(bullet) {	// Draw the bullets
-			bullet.draw();
-		});
-
-		aliens.forEach(function(alien) {	// Draw the aliens
-			alien.draw();
-		});
-
-		stars.forEach(function(star) {	// Draw the stars
+		stars.forEach(function(star) {
 			star.draw();
 		});
 
-		console.log(stars.length);
+		aliens.forEach(function(alien) {
+			alien.draw();
+		});
+
+		bullets.forEach(function(bullet) {
+			bullet.draw();
+		});
 
 		stars.push(Star({}));
 	}
