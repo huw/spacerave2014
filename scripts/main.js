@@ -148,6 +148,10 @@ $(document).ready(function(){
 		return i;
 	}
 
+	function collides(a, b) {	// Collision detection
+		return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+	}
+
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
 		if (keydown.left || keydown.a) {
@@ -210,8 +214,8 @@ $(document).ready(function(){
 			star.update();
 		});
 
-		bullets = bullets.filter(function(bullet) {	// Cut star list down
-			return bullet.active;
+		stars = stars.filter(function(star) {	// Cut star list down
+			return star.active;
 		});
 	}
 
@@ -231,6 +235,8 @@ $(document).ready(function(){
 		stars.forEach(function(star) {	// Draw the stars
 			star.draw();
 		});
+
+		console.log(stars.length);
 
 		stars.push(Star({}));
 	}
