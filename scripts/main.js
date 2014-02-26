@@ -116,8 +116,8 @@ $(document).ready(function(){
 		speed : 5,
 		state : "alive",
 		draw  : function() {
-			this.x += Math.random() * 2 - 1;
-			this.y += Math.random() * 2 - 1;
+			this.x += Math.random() - 0.5;
+			this.y += Math.random() - 0.5;
 
 			canvas.drawImage(document.getElementById("ship"), this.x, this.y, this.width, this.height);
 		},
