@@ -42,6 +42,7 @@ $(document).ready(function(){
 	var stars          = [];
 	var bulletThrottle = false;
 	var alienDirection = "right";
+	var alienRandom    = 0;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -72,6 +73,7 @@ $(document).ready(function(){
 		i.height = 30;
 		i.color = "#F00";
 		i.speed = 4;
+		i.state = "alive";
 
 		i.draw = function() {
 			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);
@@ -112,7 +114,11 @@ $(document).ready(function(){
 		width : 30,
 		height: 30,
 		speed : 5,
+		state : "alive",
 		draw  : function() {
+			this.x += Math.random() * 2 - 1;
+			this.y += Math.random() * 2 - 1;
+
 			canvas.drawImage(document.getElementById("ship"), this.x, this.y, this.width, this.height);
 		},
 		shoot : function() {
@@ -152,45 +158,77 @@ $(document).ready(function(){
 		return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 	}
 
+	function testCollisions() {
+		bullets.forEach(function(bullet) {
+			aliens.forEach(function(alien) {
+				if (collides(bullet, alien)) {
+					bullet.active = false;
+					alien.state = "dying";
+				}
+			});
+		});
+
+		aliens.forEach(function(alien) {
+			if (collides(ship, alien)) {
+				alien.state = "dying";
+				ship.state = "dying";
+			}
+		});
+	}
+
+	function killObject(object) {
+		object.width -= 1;
+		object.height -= 1;
+		object.x += 0.5;
+		object.y += 0.5;
+
+		if (object.width < 1) {
+			object.state = "dead";
+			object.active = false;
+		}
+	}
+
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
-		if (keydown.left || keydown.a) {
-			ship.x -= ship.speed;
+		if (ship.state == "alive") {
+			if (keydown.left || keydown.a) {
+				ship.x -= ship.speed;
 
-			if (ship.x <= 0) {	// Reset position if we go out of bounds
-				ship.x = 0;
+				if (ship.x <= 0) {	// Reset position if we go out of bounds
+					ship.x = 0;
+				}
+			} else if (keydown.right || keydown.d) {
+				ship.x += ship.speed;
+
+				if (ship.x >= cWidth - ship.width) {
+					ship.x = cWidth - ship.width;
+				}
+			} else if (keydown.up || keydown.w) {
+				ship.y -= ship.speed;
+
+				if (ship.y <= 0) {
+					ship.y = 0;
+				}
+			} else if (keydown.down || keydown.s) {
+				ship.y += ship.speed;
+
+				if (ship.y >= cHeight - ship.height) {
+					ship.y = cHeight - ship.height;
+				}
 			}
-		} else if (keydown.right || keydown.d) {
-			ship.x += ship.speed;
 
-			if (ship.x >= cWidth - ship.width) {
-				ship.x = cWidth - ship.width;
+			if (keydown.shift) { // Move faster when holding shift
+				ship.speed = 10;
+			} else {
+				ship.speed = 5;
 			}
-		} else if (keydown.up || keydown.w) {
-			ship.y -= ship.speed;
 
-			if (ship.y <= 0) {
-				ship.y = 0;
-			}
-		} else if (keydown.down || keydown.s) {
-			ship.y += ship.speed;
-
-			if (ship.y >= cHeight - ship.height) {
-				ship.y = cHeight - ship.height;
-			}
-		}
-
-		if (keydown.shift) { // Move faster when holding shift
-			ship.speed = 10;
-		} else {
-			ship.speed = 5;
-		}
-
-		if (keydown.space) {
-			if (bulletThrottle === false) {	// If we haven't shot recently
-				ship.shoot();
-				bulletThrottle = true;
-				setTimeout(function(){bulletThrottle = false;}, 300);	// Don't let us shoot until 300ms
+			if (keydown.space) {
+				if (bulletThrottle === false) {	// If we haven't shot recently
+					ship.shoot();
+					bulletThrottle = true;
+					setTimeout(function(){bulletThrottle = false;}, 300);	// Don't let us shoot until 300ms
+				}
 			}
 		}
 
@@ -204,10 +242,18 @@ $(document).ready(function(){
 
 		aliens.forEach(function(alien) {	// For each alien
 			alien.update();
+
+			if (alien.state == "dying") {
+				killObject(alien);
+			}
 		});
 
 		aliens.forEach(function(alien) {
 			alien.direction();
+		});
+
+		aliens = aliens.filter(function(alien) {	// Cut star list down
+			return alien.active;
 		});
 
 		stars.forEach(function(star) {
@@ -217,12 +263,20 @@ $(document).ready(function(){
 		stars = stars.filter(function(star) {	// Cut star list down
 			return star.active;
 		});
+
+		testCollisions();
+
+		if (ship.state == "dying") {
+			killObject(ship);
+		}
 	}
 
 	function draw() {
 		canvas.clearRect(0, 0, cWidth, cHeight);	// Clear the canvas on each frame
 
-		ship.draw();	// Draw the ship
+		if (ship.state != "dead") {	// Draw the ship
+			ship.draw();
+		}
 
 		bullets.forEach(function(bullet) {	// Draw the bullets
 			bullet.draw();
