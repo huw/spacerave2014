@@ -10,10 +10,17 @@ $(document).ready(function(){
 
 	/****** INITIATE CANVAS ******/
 	var elapsed = 0;
+	var gamePaused = false;
 	setInterval(function() {	// Draw and update every frame
-		update();
-		draw();
-		elapsed++;
+		if (gamePaused === false) {
+			if (elapsed >= 60 * 3) {
+				update();
+				draw();
+			} else {
+				beginRave();
+			}
+			elapsed++;
+		}
 	}, 1000/60);	// The number we divide by is the FPS
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
@@ -44,7 +51,6 @@ $(document).ready(function(){
 	var bulletThrottle      = false;
 	var alienBulletThrottle = false;
 	var alienDirection      = "right";
-	var alienRandom         = 0;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -161,7 +167,7 @@ $(document).ready(function(){
 		i.width = Math.random() * 4;
 		i.height = i.width;
 		i.speed = 5 + (i.width * 5);
-		i.color = "#FFF";
+		i.color = "#CCC";
 
 		i.draw = function() {
 			canvas.fillStyle = this.color;
@@ -214,6 +220,11 @@ $(document).ready(function(){
 		if (object.width < 1) {
 			object.state = "dead";
 			object.active = false;
+
+			if (object == ship) {
+				gamePaused = true;
+				setTimeout(function(){elapsed = 0;gamePaused = false;}, 2000);	// Bathe in the shame for a second
+			}
 		}
 	}
 
@@ -347,6 +358,33 @@ $(document).ready(function(){
 			}));
 			alienBulletThrottle = true;
 			setTimeout(function(){alienBulletThrottle = false;}, 500);
+		}
+	}
+
+	function beginRave() {
+		canvas.clearRect(0, 0, cWidth, cHeight);
+
+		ship.x      = cWidth / 2;	// We must rebuild him!
+		ship.y      = cHeight - 60;
+		ship.width  = 30;
+		ship.height = 30;
+		ship.state  = "alive";	// Back from the dead!
+
+		aliens = [];	// Clearing these arrays works because they're either
+		bullets = [];	// initially rebuilt or rebuilt on frame
+		alienBullets = [];
+
+		bulletThrottle = false;
+		alienBulletThrottle = false;
+		alienDirection = "right";
+
+		for (var y = 0; y < 3; y++) {
+			for (var x = 0; x < 10; x++) {
+				aliens.push(Alien({
+					x: 40 + x * 80,
+					y: 40 + y * 80
+				}));
+			}
 		}
 	}
 });
