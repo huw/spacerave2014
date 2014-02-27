@@ -90,11 +90,6 @@ $(document).ready(function(){
 		return i;
 	}
 
-	alienBullets.push(AlienBullet({
-		x: cWidth / 2 + 2,
-		y: 0
-	}));
-
 	function Alien(i) {	// Alien class constructor
 		i.active = true;
 
