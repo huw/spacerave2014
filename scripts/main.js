@@ -37,13 +37,14 @@ $(document).ready(function(){
 	});
 
 	/****** DEFINE VARIABLES ******/
-	var bullets        = [];
-	var alienBullets   = [];
-	var aliens         = [];
-	var stars          = [];
-	var bulletThrottle = false;
-	var alienDirection = "right";
-	var alienRandom    = 0;
+	var bullets             = [];
+	var alienBullets        = [];
+	var aliens              = [];
+	var stars               = [];
+	var bulletThrottle      = false;
+	var alienBulletThrottle = false;
+	var alienDirection      = "right";
+	var alienRandom         = 0;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -60,6 +61,28 @@ $(document).ready(function(){
 
 		i.update = function() {
 			i.y -= i.speed;
+
+			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
+		}
+
+		return i;
+	}
+
+	function AlienBullet(i) {
+		i.active = true;
+
+		i.speed  = 5;
+		i.width  = 6;
+		i.height = i.width;
+		i.color  = "#F00";
+
+		i.draw = function() {
+			canvas.fillStyle = this.color;
+			canvas.fillRect(this.x, this.y, this.width, this.height);
+		}
+
+		i.update = function() {
+			i.y += i.speed;
 
 			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
 		}
@@ -124,9 +147,8 @@ $(document).ready(function(){
 		},
 		shoot : function() {
 			bullets.push(Bullet({
-				speed: 20,
-				x    : (this.x + this.width / 2) - Math.random() * 4,	// Quick random modifier for fun
-				y    : this.y
+				x: (this.x + this.width / 2) - Math.random() * 4,	// Quick random modifier for fun
+				y: this.y
 			}));
 		}
 	}
@@ -241,6 +263,14 @@ $(document).ready(function(){
 			return bullet.active;
 		});
 
+		alienBullets.forEach(function(bullet) {
+			bullet.update();
+		});
+
+		alienBullets = alienBullets.filter(function(bullet) {
+			return bullet.active;
+		});
+
 		aliens.forEach(function(alien) {	// For each alien
 			alien.update();
 
@@ -296,6 +326,21 @@ $(document).ready(function(){
 			bullet.draw();
 		});
 
+		alienBullets.forEach(function(bullet) {
+			bullet.draw();
+		});
+
 		stars.push(Star({}));
+
+		if (alienBulletThrottle === false) {
+			var randomAlien = Math.floor(Math.random() * aliens.length);
+
+			alienBullets.push(AlienBullet({
+				x: aliens[randomAlien].x,
+				y: aliens[randomAlien].y
+			}));
+			alienBulletThrottle = true;
+			setTimeout(function(){alienBulletThrottle = false;}, 500);
+		}
 	}
 });
