@@ -48,7 +48,7 @@ $(document).ready(function(){
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
-		
+
 		i.speed     = 20;
 		i.width     = 4;
 		i.height    = 10;
@@ -89,6 +89,11 @@ $(document).ready(function(){
 
 		return i;
 	}
+
+	alienBullets.push(AlienBullet({
+		x: cWidth / 2 + 2,
+		y: 0
+	}));
 
 	function Alien(i) {	// Alien class constructor
 		i.active = true;
@@ -194,6 +199,12 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {
 			if (collides(ship, alien)) {
 				alien.state = "dying";
+				ship.state = "dying";
+			}
+		});
+
+		alienBullets.forEach(function(bullet) {
+			if (collides(ship, bullet)) {
 				ship.state = "dying";
 			}
 		});
