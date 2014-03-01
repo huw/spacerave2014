@@ -102,11 +102,14 @@ $(document).ready(function(){
 		i.width = 30;
 		i.height = 30;
 		i.color = "#F00";
+		i.alpha = 1;
 		i.speed = 4;
 		i.state = "alive";
 
 		i.draw = function() {
+			canvas.globalAlpha = this.alpha;
 			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);
+			canvas.globalAlpha = 1;
 		}
 
 		i.update = function() {
@@ -144,12 +147,15 @@ $(document).ready(function(){
 		width : 30,
 		height: 30,
 		speed : 5,
+		alpha : 1,
 		state : "alive",
 		draw  : function() {
 			this.x += Math.random() - 0.5;
 			this.y += Math.random() - 0.5;
 
+			canvas.globalAlpha = this.alpha;
 			canvas.drawImage(document.getElementById("ship"), this.x, this.y, this.width, this.height);
+			canvas.globalAlpha = 1;
 		},
 		shoot : function() {
 			bullets.push(Bullet({
@@ -212,12 +218,9 @@ $(document).ready(function(){
 	}
 
 	function killObject(object) {
-		object.width -= 1;
-		object.height -= 1;
-		object.x += 0.5;
-		object.y += 0.5;
+		object.alpha -= 0.01
 
-		if (object.width < 1) {
+		if (object.alpha < 0.01) {
 			object.state = "dead";
 			object.active = false;
 
