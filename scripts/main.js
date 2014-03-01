@@ -387,6 +387,11 @@ $(document).ready(function(){
 			alienBulletThrottle = true;
 			setTimeout(function(){alienBulletThrottle = false;}, 500);
 		}
+
+		canvas.font = "30px PressStart2P";
+		canvas.fillStyle = "#FFF";
+		canvas.textAlign = "left";
+		canvas.fillText("SCORE:" + score, 5, cHeight);
 	}
 
 	function resetGame() {
