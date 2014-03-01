@@ -391,7 +391,7 @@ $(document).ready(function(){
 		canvas.font = "30px PressStart2P";
 		canvas.fillStyle = "#FFF";
 		canvas.textAlign = "left";
-		canvas.fillText("SCORE:" + score, 5, cHeight);
+		canvas.fillText("SCORE:" + score, 10, 45);
 	}
 
 	function resetGame() {
