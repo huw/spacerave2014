@@ -60,6 +60,11 @@ $(document).ready(function(){
 	var alienDirection      = "right";
 	var score               = 0;
 
+	var arrowsUsed = false;
+	var wasdUsed   = false;
+	var spaceUsed  = false;
+	var clickUsed  = false;
+
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
 
@@ -273,6 +278,14 @@ $(document).ready(function(){
 				}
 			}
 
+			if (keydown.left || keydown.right || keydown.up || keydown.down) {
+				arrowsUsed = true;
+			}
+
+			if (keydown.a || keydown.d || keydown.w || keydown.s) {
+				wasdUsed = true;
+			}
+
 			if (keydown.shift) { // Move faster when holding shift
 				ship.speed = 10;
 			} else {
@@ -280,6 +293,8 @@ $(document).ready(function(){
 			}
 
 			if (keydown.space) {
+				spaceUsed = true;
+
 				if (bulletThrottle === false) {	// If we haven't shot recently
 					ship.shoot();
 					bulletThrottle = true;
@@ -288,6 +303,8 @@ $(document).ready(function(){
 			}
 
 			$("#canvas").click(function(e){
+				clickUsed = true;
+
 			    if (bulletThrottle === false) {
 			    	ship.shoot();
 			    	bulletThrottle = true;
@@ -378,14 +395,16 @@ $(document).ready(function(){
 		}));
 
 		if (alienBulletThrottle === false) {
-			var randomAlien = Math.floor(Math.random() * aliens.length);
+			if (aliens[0]) {
+				var randomAlien = Math.floor(Math.random() * aliens.length);
 
-			alienBullets.push(AlienBullet({
-				x: aliens[randomAlien].x,
-				y: aliens[randomAlien].y
-			}));
-			alienBulletThrottle = true;
-			setTimeout(function(){alienBulletThrottle = false;}, 500);
+				alienBullets.push(AlienBullet({
+					x: aliens[randomAlien].x,
+					y: aliens[randomAlien].y
+				}));
+				alienBulletThrottle = true;
+				setTimeout(function(){alienBulletThrottle = false;}, 500);
+			}
 		}
 
 		canvas.font = "30px PressStart2P";
@@ -453,7 +472,72 @@ $(document).ready(function(){
 		numberY  += 0.2;
 
 		canvas.font = textSize + "px PressStart2P";
-
 		canvas.fillText(timeLeft, cWidth / 2, numberY);
+
+		canvas.font = "20px PressStart2P";
+
+		if (!arrowsUsed) {
+			if (!wasdUsed) {
+				if (!spaceUsed) {
+					if (!clickUsed) {
+						textBody = "Arrows or WASD to move, click or space to shoot.";
+					} else {
+						textBody = "Arrows or WASD to move, you can also use space to shoot!";
+					}
+				} else {
+					if (!clickUsed) {
+						textBody = "Arrows or WASD to move, you can also click to shoot!";
+					} else {
+						textBody = "Arrows or WASD to move";
+					}
+				}
+			} else {
+				if (!spaceUsed) {
+					if (!clickUsed) {
+						textBody = "You can also use arrows to move, click or space to shoot.";
+					} else {
+						textBody = "You can also use arrows to move or space to shoot!";
+					}
+				} else {
+					if (!clickUsed) {
+						textBody = "You can also use arrows to move or click to shoot!";
+					} else {
+						textBody = "You can also use arrows to move.";
+					}
+				}
+			}
+		} else {
+			if (!wasdUsed) {
+				if (!spaceUsed) {
+					if (!clickUsed) {
+						textBody = "You can also use WASD to move, click or space to shoot.";
+					} else {
+						textBody = "You can also use WASD to move, and space to shoot!";
+					}
+				} else {
+					if (!clickUsed) {
+						textBody = "You can also use WASD to move, and click to shoot!";
+					} else {
+						textBody = "You can also use WASD to move";
+					}
+				}
+			} else {
+				if (!spaceUsed) {
+					if (!clickUsed) {
+						textBody = "You can use click or space to shoot.";
+					} else {
+						textBody = "You can also space to shoot.";
+					}
+				} else {
+					if (!clickUsed) {
+						textBody = "You can also click to shoot!";
+					} else {
+						textBody = "";
+					}
+				}
+			}
+		}
+
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 180);
 	}
 });
