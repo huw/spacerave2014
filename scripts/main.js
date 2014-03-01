@@ -10,11 +10,12 @@ $(document).ready(function(){
 
 	/****** INITIATE CANVAS ******/
 	var elapsed = 0;
-	var gamePaused = false;
 	var window_focus = true;
+
 	setInterval(function() {	// Draw and update every frame
 		$(window).focus(function(){window_focus = true;});
 		$(window).blur(function(){window_focus = false;});
+
 		if (window_focus) {
 			if (elapsed > 60 * 3) {
 				update();
@@ -51,10 +52,11 @@ $(document).ready(function(){
 	});
 
 	/****** DEFINE VARIABLES ******/
-	var bullets             = [];
-	var alienBullets        = [];
-	var aliens              = [];
-	var stars               = [];
+	var bullets      = [];
+	var alienBullets = [];
+	var aliens       = [];
+	var stars        = [];
+
 	var bulletThrottle      = false;
 	var alienBulletThrottle = false;
 	var alienDirection      = "right";
@@ -476,7 +478,7 @@ $(document).ready(function(){
 
 		canvas.font = "20px PressStart2P";
 
-		if (!arrowsUsed) {
+		if (!arrowsUsed) {	// Generate tutorial text. This one's pretty big, but very useful
 			if (!wasdUsed) {
 				if (!spaceUsed) {
 					if (!clickUsed) {
