@@ -177,7 +177,6 @@ $(document).ready(function(){
 		i.active = true;
 
 		i.x = Math.random() * cWidth;
-		i.y = 0;
 		i.width = Math.random() * 4;
 		i.height = i.width;
 		i.speed = 5 + (i.width * 5);
@@ -195,6 +194,12 @@ $(document).ready(function(){
 		}
 
 		return i;
+	}
+
+	for (var x = 0; x < 40; x++) {
+		stars.push(Star({
+			y: Math.random() * cHeight
+		}));
 	}
 
 	function collides(a, b) {	// Collision detection
@@ -368,7 +373,9 @@ $(document).ready(function(){
 			bullet.draw();
 		});
 
-		stars.push(Star({}));
+		stars.push(Star({
+			y: 0
+		}));
 
 		if (alienBulletThrottle === false) {
 			var randomAlien = Math.floor(Math.random() * aliens.length);
