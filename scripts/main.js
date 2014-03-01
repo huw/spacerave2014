@@ -11,18 +11,23 @@ $(document).ready(function(){
 	/****** INITIATE CANVAS ******/
 	var elapsed = 0;
 	var gamePaused = false;
+	var window_focus = true;
 	setInterval(function() {	// Draw and update every frame
-		if (elapsed > 60 * 3) {
-			update();
-			draw();
-		} else if (elapsed == 0) {
-			canvas.clearRect(0, 0, cWidth, cHeight);
-		} else if (elapsed == 60 * 3) {
-			resetGame();
-		} else {
-			beginRave();
+		$(window).focus(function(){window_focus = true;});
+		$(window).blur(function(){window_focus = false;});
+		if (window_focus) {
+			if (elapsed > 60 * 3) {
+				update();
+				draw();
+			} else if (elapsed == 0) {
+				canvas.clearRect(0, 0, cWidth, cHeight);
+			} else if (elapsed == 60 * 3) {
+				resetGame();
+			} else {
+				beginRave();
+			}
+			elapsed++;
 		}
-		elapsed++;
 	}, 1000/60);	// The number we divide by is the FPS
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
@@ -53,6 +58,7 @@ $(document).ready(function(){
 	var bulletThrottle      = false;
 	var alienBulletThrottle = false;
 	var alienDirection      = "right";
+	var score               = 0;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -330,6 +336,8 @@ $(document).ready(function(){
 		if (ship.state == "dying") {
 			killObject(ship);
 		}
+
+		score += 1;
 	}
 
 	function draw() {
@@ -389,6 +397,7 @@ $(document).ready(function(){
 		bulletThrottle = false;
 		alienBulletThrottle = false;
 		alienDirection = "right";
+		score = 0;
 		
 		timeLeft = 3;
 		textSize = 80;
