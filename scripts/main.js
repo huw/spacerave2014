@@ -218,7 +218,7 @@ $(document).ready(function(){
 	}
 
 	function killObject(object) {
-		object.alpha -= 0.01
+		object.alpha -= 0.04
 
 		if (object.alpha < 0.01) {
 			object.state = "dead";
@@ -369,8 +369,7 @@ $(document).ready(function(){
 
 		ship.x      = cWidth / 2;	// We must rebuild him!
 		ship.y      = cHeight - 60;
-		ship.width  = 30;
-		ship.height = 30;
+		ship.alpha  = 1;
 		ship.state  = "alive";	// Back from the dead!
 
 		aliens = [];	// Clearing these arrays works because they're either
