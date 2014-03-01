@@ -51,6 +51,7 @@ $(document).ready(function(){
 	var bulletThrottle      = false;
 	var alienBulletThrottle = false;
 	var alienDirection      = "right";
+	var timeleft            = 3;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -374,6 +375,16 @@ $(document).ready(function(){
 
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
+
+		canvas.font = "40px Courier New";
+		canvas.fillStyle = "#FFF";
+		canvas.fillText("Begin", cWidth / 2 - 50, cHeight / 2 - 50);
+
+		if (elapsed % 60 == 0) {
+			timeleft--;
+		}
+
+		canvas.fillText(timeleft, cWidth / 2 - 14, cHeight / 2);
 
 		ship.x      = cWidth / 2;	// We must rebuild him!
 		ship.y      = cHeight - 60;
