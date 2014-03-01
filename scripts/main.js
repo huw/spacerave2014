@@ -273,6 +273,14 @@ $(document).ready(function(){
 					setTimeout(function(){bulletThrottle = false;}, 300);	// Don't let us shoot until 300ms
 				}
 			}
+
+			$("#canvas").click(function(e){
+			    if (bulletThrottle === false) {
+			    	ship.shoot();
+			    	bulletThrottle = true;
+			    	setTimeout(function(){bulletThrottle = false;}, 300);
+			    }
+			});
 		}
 
 		bullets.forEach(function(bullet) {	// For each bullet, call its update method
