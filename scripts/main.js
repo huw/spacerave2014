@@ -12,15 +12,17 @@ $(document).ready(function(){
 	var elapsed = 0;
 	var gamePaused = false;
 	setInterval(function() {	// Draw and update every frame
-		if (gamePaused === false) {
-			if (elapsed >= 60 * 3) {
-				update();
-				draw();
-			} else {
-				beginRave();
-			}
-			elapsed++;
+		if (elapsed > 60 * 3) {
+			update();
+			draw();
+		} else if (elapsed == 0) {
+			canvas.clearRect(0, 0, cWidth, cHeight);
+		} else if (elapsed == 60 * 3) {
+			resetGame();
+		} else {
+			beginRave();
 		}
+		elapsed++;
 	}, 1000/60);	// The number we divide by is the FPS
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
@@ -51,7 +53,6 @@ $(document).ready(function(){
 	var bulletThrottle      = false;
 	var alienBulletThrottle = false;
 	var alienDirection      = "right";
-	var timeleft            = 3;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -226,8 +227,8 @@ $(document).ready(function(){
 			object.active = false;
 
 			if (object == ship) {
-				gamePaused = true;
-				setTimeout(function(){elapsed = 0;gamePaused = false;}, 2000);	// Bathe in the shame for a second
+				firstTry = false;
+				elapsed  = 0;
 			}
 		}
 	}
@@ -373,18 +374,8 @@ $(document).ready(function(){
 		}
 	}
 
-	function beginRave() {
+	function resetGame() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
-
-		canvas.font = "40px Courier New";
-		canvas.fillStyle = "#FFF";
-		canvas.fillText("Begin", cWidth / 2 - 50, cHeight / 2 - 50);
-
-		if (elapsed % 60 == 0) {
-			timeleft--;
-		}
-
-		canvas.fillText(timeleft, cWidth / 2 - 14, cHeight / 2);
 
 		ship.x      = cWidth / 2;	// We must rebuild him!
 		ship.y      = cHeight - 60;
@@ -398,6 +389,10 @@ $(document).ready(function(){
 		bulletThrottle = false;
 		alienBulletThrottle = false;
 		alienDirection = "right";
+		
+		timeLeft = 3;
+		textSize = 80;
+		numberY  = cHeight / 2 + 90;
 
 		for (var y = 0; y < 3; y++) {
 			for (var x = 0; x < 10; x++) {
@@ -407,5 +402,37 @@ $(document).ready(function(){
 				}));
 			}
 		}
+	}
+
+	var timeLeft = 3;
+	var firstTry = true;
+	var textSize = 80;
+	var numberY  = cHeight / 2 + 90;
+	function beginRave() {
+		canvas.clearRect(0, 0, cWidth, cHeight);
+
+		if (firstTry === true) {
+			textColor = "#FFF";
+			var textBody  = "BEGIN RAVE";
+		} else {
+			textColor = "#F00";
+			var textBody  = "GAME OVER";
+		}
+
+		canvas.font = "80px PressStart2P";
+		canvas.fillStyle = textColor;
+		canvas.textAlign = 'center';
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 - 80);
+
+		if (elapsed % 60 == 0) {
+			timeLeft--;
+		}
+
+		textSize += 0.4;
+		numberY  += 0.2;
+
+		canvas.font = textSize + "px PressStart2P";
+
+		canvas.fillText(timeLeft, cWidth / 2, numberY);
 	}
 });
