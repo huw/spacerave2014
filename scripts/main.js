@@ -16,7 +16,7 @@ $(document).ready(function(){
 		$(window).focus(function(){window_focus = true; bgMusic.play()});
 		$(window).blur(function(){window_focus = false; bgMusic.pause();});
 
-		if (window_focus) {
+		if (window_focus && bgMusic.readyState == 4) {
 			if (elapsed > 60 * 3) {
 				update();
 				draw();
@@ -61,7 +61,7 @@ $(document).ready(function(){
 	var alienBulletThrottle   = false;
 	var alienGenerateThrottle = false;
 	var alienDirection        = "right";
-	
+
 	var alienY = "";
 	var score  = 0;
 	var bumps  = 0;
@@ -409,9 +409,7 @@ $(document).ready(function(){
 
 		score += 1;
 
-		if (bgMusic.readyState == 4) {
-			bgMusic.play();
-		}
+		bgMusic.play();
 	}
 
 	function draw() {
@@ -483,7 +481,7 @@ $(document).ready(function(){
 		alienDirection = "right";
 		alienY = "";
 		score = 0;
-		
+
 		timeLeft = 3;
 		textSize = 80;
 		numberY  = cHeight / 2 + 90;
