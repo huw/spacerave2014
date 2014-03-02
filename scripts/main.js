@@ -13,8 +13,8 @@ $(document).ready(function(){
 	var window_focus = true;
 
 	setInterval(function() {	// Draw and update every frame
-		$(window).focus(function(){window_focus = true;});
-		$(window).blur(function(){window_focus = false;});
+		$(window).focus(function(){window_focus = true; bgMusic.play()});
+		$(window).blur(function(){window_focus = false; bgMusic.pause();});
 
 		if (window_focus) {
 			if (elapsed > 60 * 3) {
@@ -247,9 +247,15 @@ $(document).ready(function(){
 			if (object == ship) {
 				firstTry = false;
 				elapsed  = 0;
+
+				bgMusic.pause()
+				bgMusic.currentTime = 0;
 			}
 		}
 	}
+
+	bgMusic = document.getElementById('bg');
+	bgMusic.loop = true;
 
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
@@ -362,6 +368,10 @@ $(document).ready(function(){
 		}
 
 		score += 1;
+
+		if (bgMusic.readyState == 4) {
+			bgMusic.play();
+		}
 	}
 
 	function draw() {

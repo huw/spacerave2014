@@ -14,6 +14,6 @@ canvas {
   margin: auto auto;
 }
 
-img {
+img, audio {
   display: none;
 }
