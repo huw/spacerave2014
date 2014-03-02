@@ -57,10 +57,14 @@ $(document).ready(function(){
 	var aliens       = [];
 	var stars        = [];
 
-	var bulletThrottle      = false;
-	var alienBulletThrottle = false;
-	var alienDirection      = "right";
-	var score               = 0;
+	var bulletThrottle        = false;
+	var alienBulletThrottle   = false;
+	var alienGenerateThrottle = false;
+	var alienDirection        = "right";
+	
+	var alienY = "";
+	var score  = 0;
+	var bumps  = 0;
 
 	var arrowsUsed = false;
 	var wasdUsed   = false;
@@ -128,6 +132,14 @@ $(document).ready(function(){
 		}
 
 		i.update = function() {
+			if (i.yDirection == "down") {
+				i.y += i.speed;
+
+				if (i.y >= i.originalY + 80) {
+					i.yDirection = "";
+				}
+			}
+
 			if (alienDirection == "left") {
 				i.x -= i.speed;
 			} else if (alienDirection == "right") {
@@ -138,21 +150,18 @@ $(document).ready(function(){
 		i.direction = function() {
 			if (i.x < 0) {
 				alienDirection = "right";
+
+				aliens.forEach(function(alien) {
+					alien.x += alien.speed;
+				});
+
+				alienGenerateThrottle = false;
 			} else if (i.x > cWidth - i.width) {
 				alienDirection = "left";
 			}
 		}
 
 		return i;
-	}
-
-	for (var y = 0; y < 3; y++) {
-		for (var x = 0; x < 10; x++) {	// Iterate through a 3x10 matrix, push aliens based on their positon here
-			aliens.push(Alien({
-				x: 40 + x * 80,
-				y: 40 + y * 80
-			}));
-		}
 	}
 
 	var ship = {	// Ship object constructor. It doesn't need to be a function
@@ -214,14 +223,16 @@ $(document).ready(function(){
 	}
 
 	function testCollisions() {
-		bullets.forEach(function(bullet) {
-			aliens.forEach(function(alien) {
-				if (collides(bullet, alien)) {
-					bullet.active = false;
-					alien.state = "dying";
-				}
+		if (aliens.length >= 1) {	// Don't kill if there's an alien left
+			bullets.forEach(function(bullet) {
+				aliens.forEach(function(alien) {
+					if (collides(bullet, alien)) {
+						bullet.active = false;
+						alien.state = "dying";
+					}
+				});
 			});
-		});
+		}
 
 		aliens.forEach(function(alien) {
 			if (collides(ship, alien)) {
@@ -232,6 +243,12 @@ $(document).ready(function(){
 
 		alienBullets.forEach(function(bullet) {
 			if (collides(ship, bullet)) {
+				ship.state = "dying";
+			}
+		});
+
+		aliens.forEach(function(alien) {
+			if (alien.y >= cHeight) {
 				ship.state = "dying";
 			}
 		});
@@ -254,7 +271,25 @@ $(document).ready(function(){
 		}
 	}
 
+	function pushAlienRow() {
+		for (var x = 0; x < 10; x++) {
+
+			aliens.push(Alien({
+				x: x * 80,
+				y: 0
+			}));
+		}
+
+		aliens.forEach(function(alien) {
+			alien.originalY = alien.y;
+			alien.yDirection = "down";
+		});
+
+		alienGenerateThrottle = false;
+	}
+
 	bgMusic = document.getElementById('bg');
+	bgMusic.play();
 	bgMusic.loop = true;
 
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
@@ -306,7 +341,7 @@ $(document).ready(function(){
 				if (bulletThrottle === false) {	// If we haven't shot recently
 					ship.shoot();
 					bulletThrottle = true;
-					setTimeout(function(){bulletThrottle = false;}, 300);	// Don't let us shoot until 300ms
+					setTimeout(function(){bulletThrottle = false;}, 350);	// Don't let us shoot until 300ms
 				}
 			}
 
@@ -316,7 +351,7 @@ $(document).ready(function(){
 			    if (bulletThrottle === false) {
 			    	ship.shoot();
 			    	bulletThrottle = true;
-			    	setTimeout(function(){bulletThrottle = false;}, 300);
+			    	setTimeout(function(){bulletThrottle = false;}, 350);
 			    }
 			});
 		}
@@ -348,6 +383,11 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {
 			alien.direction();
 		});
+
+		if (alienGenerateThrottle === false) {
+			pushAlienRow();
+			alienGenerateThrottle = true;
+		}
 
 		aliens = aliens.filter(function(alien) {	// Cut star list down
 			return alien.active;
@@ -439,21 +479,14 @@ $(document).ready(function(){
 
 		bulletThrottle = false;
 		alienBulletThrottle = false;
+		alienGenerateThrottle = false;
 		alienDirection = "right";
+		alienY = "";
 		score = 0;
 		
 		timeLeft = 3;
 		textSize = 80;
 		numberY  = cHeight / 2 + 90;
-
-		for (var y = 0; y < 3; y++) {
-			for (var x = 0; x < 10; x++) {
-				aliens.push(Alien({
-					x: 40 + x * 80,
-					y: 40 + y * 80
-				}));
-			}
-		}
 	}
 
 	var timeLeft = 3;
