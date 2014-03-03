@@ -558,6 +558,7 @@ $(document).ready(function(){
 		alienDirection = "right";
 		alienY = "";
 		score = 0;
+		bgAlpha = "1";
 
 		timeLeft = 3;
 		textSize = 80;
