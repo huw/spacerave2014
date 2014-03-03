@@ -105,7 +105,7 @@ $(document).ready(function(){
 	var spaceUsed  = false;
 	var clickUsed  = false;
 
-	var bgAlpha = "3";
+	var bgAlpha = "1";
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -343,7 +343,7 @@ $(document).ready(function(){
 			}
 		}
 
-		return colors.join("");
+		return "#" + colors.join("");
 	};
 
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
