@@ -152,7 +152,7 @@ $(document).ready(function(){
 		i.height = 30;
 		i.color = "#F00";
 		i.alpha = 1;
-		i.speed = 4;
+		i.speed = 3;
 		i.state = "alive";
 
 		i.draw = function() {
@@ -200,7 +200,7 @@ $(document).ready(function(){
 		y     : cHeight - 60,
 		width : 30,
 		height: 30,
-		speed : 5,
+		speed : 8,
 		alpha : 1,
 		state : "alive",
 		draw  : function() {
@@ -253,31 +253,32 @@ $(document).ready(function(){
 	}
 
 	function testCollisions() {
-		if (aliens.length >= 1) {	// Don't kill if there's an alien left
-			bullets.forEach(function(bullet) {
-				aliens.forEach(function(alien) {
-					if (collides(bullet, alien)) {
-						bullet.active = false;
+		bullets.forEach(function(bullet) {	// If we shoot alien
+			aliens.forEach(function(alien) {
+				if (collides(bullet, alien)) {
+					bullet.active = false;
+
+					if (aliens.length > 1) {
 						alien.state = "dying";
 					}
-				});
+				}
 			});
-		}
+		});
 
-		aliens.forEach(function(alien) {
+		aliens.forEach(function(alien) {	// If we smash into an alien
 			if (collides(ship, alien)) {
 				alien.state = "dying";
 				ship.state = "dying";
 			}
 		});
 
-		alienBullets.forEach(function(bullet) {
+		alienBullets.forEach(function(bullet) {	// If we are shot
 			if (collides(ship, bullet)) {
 				ship.state = "dying";
 			}
 		});
 
-		aliens.forEach(function(alien) {
+		aliens.forEach(function(alien) {	// Kill us if the alien reaches the bottom
 			if (alien.y >= cHeight) {
 				ship.state = "dying";
 			}
@@ -361,12 +362,6 @@ $(document).ready(function(){
 
 			if (keydown.a || keydown.d || keydown.w || keydown.s) {
 				wasdUsed = true;
-			}
-
-			if (keydown.shift) { // Move faster when holding shift
-				ship.speed = 10;
-			} else {
-				ship.speed = 5;
 			}
 
 			if (keydown.space) {
@@ -487,7 +482,7 @@ $(document).ready(function(){
 					y: aliens[randomAlien].y
 				}));
 				alienBulletThrottle = true;
-				setTimeout(function(){alienBulletThrottle = false;}, 500);
+				setTimeout(function(){alienBulletThrottle = false;}, 700);
 			}
 		}
 
@@ -529,7 +524,6 @@ $(document).ready(function(){
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
 		highScore = getCookie("highscore");
-		console.log(highScore);
 
 		if (firstTry) {
 			textColor = "#FFF";
