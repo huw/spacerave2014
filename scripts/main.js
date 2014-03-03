@@ -35,6 +35,25 @@ $(document).ready(function(){
 		bgColor = randomColor(bgAlpha);
 	}, 350);
 
+	setInterval(function() {
+		option = Math.floor(Math.random() * 2);
+		
+		while (option == 0 && bgAlpha == "f") {	// Don't raise it above FFFFFF
+			option = Math.floor(Math.random() * 2);
+		}
+
+		console.log(option, " ", bgAlpha);
+
+		switch(option) {
+			case 0:
+				bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
+				alertText = "Rave Levels Up!";
+				break;
+			default:
+				break;
+		}
+	}, 2800);
+
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
 	/* 	I kinda copied this bit from a canvas tutorial.
 		It just simplifies the whole keypress detection
