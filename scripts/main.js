@@ -494,7 +494,7 @@ $(document).ready(function(){
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
-		if (firstTry === true) {
+		if (firstTry) {
 			textColor = "#FFF";
 			var textBody  = "BEGIN RAVE";
 		} else {
@@ -513,6 +513,14 @@ $(document).ready(function(){
 
 		textSize += 0.4;
 		numberY  += 0.2;
+
+		if (!firstTry) {
+			canvas.font = "40px PressStart2P";
+			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + 180);
+		}
+
+		canvas.font = "25px PressStart2P";
+		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + 230)
 
 		canvas.font = textSize + "px PressStart2P";
 		canvas.fillText(timeLeft, cWidth / 2, numberY);
@@ -581,6 +589,6 @@ $(document).ready(function(){
 			}
 		}
 
-		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 180);
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 270);
 	}
 });
