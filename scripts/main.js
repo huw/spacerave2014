@@ -42,8 +42,6 @@ $(document).ready(function(){
 			option = Math.floor(Math.random() * 2);
 		}
 
-		console.log(option, " ", bgAlpha);
-
 		switch(option) {
 			case 0:
 				bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
@@ -353,7 +351,7 @@ $(document).ready(function(){
 	bgMusic.loop = true;
 
 	function randomColor(top) {	// Returns a random bright hex color
-		var colors = [0, 0, 0, 0, 0, 0];
+		var colors = [0, 0, 0];
 		for (var x = 0; x < colors.length; x++) {
 			if (Math.random() < 0.5) {	// Quick boolean random, from jsFiddle
 				colors[x] = top;
@@ -362,12 +360,10 @@ $(document).ready(function(){
 			}
 		}
 
-		if (colors.join("") == top+top+top+top+top+top ||
-		colors.join("") == "FF0000" ||
-		colors.join("") == "0"+top+"0"+top+"0"+top ||
-		colors.join("") == top+"0"+top+"0"+top+"0" ||
-		colors.join("") == "EE0000") {
-			colors = [0, 0, top, 0, 0, top];
+		if (colors.join("") == top+top+top ||
+		colors.join("") == top+"00" ||
+		colors.join("") == "000") {
+			colors = [0, 0, top];
 		}
 
 		return "#" + colors.join("");
