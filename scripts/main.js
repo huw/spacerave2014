@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 	setInterval(function() {
 		option = Math.floor(Math.random() * 2);
-		
+
 		while (option == 0 && bgAlpha == "f") {	// Don't raise it above FFFFFF
 			option = Math.floor(Math.random() * 2);
 		}
@@ -360,6 +360,14 @@ $(document).ready(function(){
 			} else {
 				colors[x] = "0";
 			}
+		}
+
+		if (colors.join("") == top+top+top+top+top+top ||
+		colors.join("") == "FF0000" ||
+		colors.join("") == "0"+top+"0"+top+"0"+top ||
+		colors.join("") == top+"0"+top+"0"+top+"0" ||
+		colors.join("") == "EE0000") {
+			colors = [0, 0, top, 0, 0, top];
 		}
 
 		return "#" + colors.join("");
