@@ -31,6 +31,10 @@ $(document).ready(function(){
 		}
 	}, 1000/60);	// The number we divide by is the FPS
 
+	setInterval(function() {
+		bgColor = randomColor(bgAlpha);
+	}, 350);
+
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
 	/* 	I kinda copied this bit from a canvas tutorial.
 		It just simplifies the whole keypress detection
@@ -53,7 +57,7 @@ $(document).ready(function(){
 
 	/****** COOKIE RETRIEVER ******/
 	/* Again, I don't wanna reinvent the wheel.
-	   Taken from w3schools */
+	   Taken from stackoverflow */
 	var createCookie = function(name, value, days) {
 	    var expires;
 	    if (days) {
@@ -100,6 +104,8 @@ $(document).ready(function(){
 	var wasdUsed   = false;
 	var spaceUsed  = false;
 	var clickUsed  = false;
+
+	var bgAlpha = "3";
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -327,6 +333,19 @@ $(document).ready(function(){
 	bgMusic.play();
 	bgMusic.loop = true;
 
+	function randomColor(top) {	// Returns a random bright hex color
+		var colors = [0, 0, 0, 0, 0, 0];
+		for (var x = 0; x < colors.length; x++) {
+			if (Math.random() < 0.5) {	// Quick boolean random, from jsFiddle
+				colors[x] = top;
+			} else {
+				colors[x] = "0";
+			}
+		}
+
+		return colors.join("");
+	};
+
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
 		if (ship.state == "alive") {
@@ -448,6 +467,8 @@ $(document).ready(function(){
 		and finally the bullets */
 
 		canvas.clearRect(0, 0, cWidth, cHeight);
+		canvas.fillStyle = bgColor;
+		canvas.fillRect(0, 0, cWidth, cHeight);
 
 		if (ship.state != "dead") {
 			ship.draw();
