@@ -41,10 +41,10 @@ $(document).ready(function(){
 	var alertStart;
 	setInterval(function() {	// The Wheel of Spin!
 		if (window_focus) {
-			option = Math.floor(Math.random() * 3);	// Choose a random number
+			option = Math.floor(Math.random() * 4);	// Choose a random number
 
 			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
-				option = Math.floor(Math.random() * 3);
+				option = Math.floor(Math.random() * 4);
 			}
 
 			switch(option) {	// Do something depending on the random number
@@ -54,7 +54,16 @@ $(document).ready(function(){
 					break;
 				case 1:
 					ship.speed += 0.5;	// This one raises our movement speed a little
-					alertText = "MOVE FASTER!";
+					alertText = "SPEED UP!";
+					break;
+				case 2:
+					aliens.forEach(function(alien) {	// This one speeds up aliens
+						alien.speed += 0.5;
+					});
+					alienSpeed += 0.5;	// Speed up new aliens and bullets
+					alienBulletSpeed += 0.5;
+
+					alertText = "ALIEN SPEED & BULLETS UP!"
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -134,6 +143,9 @@ $(document).ready(function(){
 
 	var bgAlpha = "1";
 
+	var alienBulletSpeed = cHeight * 0.006;
+	var alienSpeed       = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
+
 	function Bullet(i) {	// Bullet class constructor
 		i.active = true;
 
@@ -159,7 +171,7 @@ $(document).ready(function(){
 	function AlienBullet(i) {
 		i.active = true;
 		
-		i.speed  = cHeight * 0.006;	// Alien bullets are pretty much the same as normal ones
+		i.speed  = alienBulletSpeed;	// Alien bullets are pretty much the same as normal ones
 		i.width  = cWidth * 0.004;
 		i.height = i.width;
 		i.colour = "#F00";
@@ -185,7 +197,7 @@ $(document).ready(function(){
 		i.height = i.width;			// being equal between screens
 		i.colour = "#F00";
 		i.alpha  = 1;
-		i.speed  = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
+		i.speed  = alienSpeed;
 		i.state  = "alive";	// This is a determinator for animations
 
 		i.draw = function() {
@@ -319,7 +331,7 @@ $(document).ready(function(){
 	}
 
 	function killObject(object) {
-		object.alpha -= 0.004 	// We fade away
+		object.alpha -= 0.04 	// We fade away
 
 		if (object.alpha < 0.01) {	// If we've faded
 			object.state = "dead";	// We die
@@ -583,6 +595,8 @@ $(document).ready(function(){
 		timeLeft              = 3;
 		textSize              = 80;
 		numberY               = cHeight / 2 + 90;
+		alienBulletSpeed      = cHeight * 0.006;
+		alienSpeed            = Math.floor(cWidth * 0.003);
 	}
 
 	var timeLeft = 3;
