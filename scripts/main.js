@@ -38,22 +38,27 @@ $(document).ready(function(){
 
 	var alertStart;
 	setInterval(function() {
-		option = Math.floor(Math.random() * 2);
+		option = Math.floor(Math.random() * 3);
 
 		while (option == 0 && bgAlpha == "f") {	// Don't raise it above FFFFFF
-			option = Math.floor(Math.random() * 2);
+			option = Math.floor(Math.random() * 3);
 		}
 
 		switch(option) {
 			case 0:
 				bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
 				alertText = "RAVE LEVELS UP!";
-				alertAlpha = 0.1;
+				break;
+			case 1:
+				ship.speed += 0.5;
+				alertText = "MOVE FASTER!";
 				break;
 			default:
+				alertText = "NO BONUS :(";
 				break;
 		}
 
+		alertAlpha = 0.1;
 		alertStart = elapsed;
 	}, 2800);
 
