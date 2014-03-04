@@ -33,33 +33,37 @@ $(document).ready(function(){
 
 	var bgColor;
 	setInterval(function() {
-		bgColor = randomColor(bgAlpha, bgColor, bgAlpha + "00", "F0F");
+		if (window_focus) {
+			bgColor = randomColor(bgAlpha, bgColor, bgAlpha + "00", "F0F");
+		}
 	}, 350);
 
 	var alertStart;
 	setInterval(function() {
-		option = Math.floor(Math.random() * 3);
-
-		while (option == 0 && bgAlpha == "f") {	// Don't raise it above FFFFFF
+		if (window_focus) {
 			option = Math.floor(Math.random() * 3);
-		}
 
-		switch(option) {
-			case 0:
-				bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
-				alertText = "RAVE LEVELS UP!";
-				break;
-			case 1:
-				ship.speed += 0.5;
-				alertText = "MOVE FASTER!";
-				break;
-			default:
-				alertText = "NO BONUS :(";
-				break;
-		}
+			while (option == 0 && bgAlpha == "f") {	// Don't raise it above FFFFFF
+				option = Math.floor(Math.random() * 3);
+			}
 
-		alertAlpha = 0.1;
-		alertStart = elapsed;
+			switch(option) {
+				case 0:
+					bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
+					alertText = "RAVE LEVELS UP!";
+					break;
+				case 1:
+					ship.speed += 0.5;
+					alertText = "MOVE FASTER!";
+					break;
+				default:
+					alertText = "NO BONUS :(";
+					break;
+			}
+
+			alertAlpha = 0.1;
+			alertStart = elapsed;
+		}
 	}, 2800);
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
@@ -583,6 +587,8 @@ $(document).ready(function(){
 		alienDirection = "right";
 		alienY = "";
 		score = 0;
+
+		ship.speed = 8;
 
 		timeLeft = 3;
 		textSize = 80;
