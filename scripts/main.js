@@ -495,7 +495,7 @@ $(document).ready(function(){
 			alertAlpha -= 0.1;
 		}
 
-		if (alertAlpha <= 0) {
+		if (alertAlpha <= 0.1) {
 			alertText = "";
 		}
 
