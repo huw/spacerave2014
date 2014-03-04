@@ -31,8 +31,9 @@ $(document).ready(function(){
 		}
 	}, 1000/60);	// The number we divide by is the FPS
 
+	var bgColor;
 	setInterval(function() {
-		bgColor = randomColor(bgAlpha);
+		bgColor = randomColor(bgAlpha, bgColor, "F00", "F0F");
 	}, 350);
 
 	setInterval(function() {
@@ -122,7 +123,7 @@ $(document).ready(function(){
 	var spaceUsed  = false;
 	var clickUsed  = false;
 
-	var bgAlpha = "1";
+	var bgAlpha     = "1";
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
@@ -130,7 +131,7 @@ $(document).ready(function(){
 		i.speed     = 20;
 		i.width     = 4;
 		i.height    = 10;
-		i.color     = "#F09"
+		i.color     = "#F0F";
 
 		i.draw = function() {
 			canvas.fillStyle = this.color;
@@ -319,8 +320,9 @@ $(document).ready(function(){
 				firstTry = false;
 				elapsed  = 0;
 
-				bgMusic.pause()
+				bgMusic.pause()	// Reset some variables
 				bgMusic.currentTime = 0;
+				bgAlpha = "1";
 
 				if (score > highScore) {
 					createCookie("highscore", score + 1, "90");
@@ -350,20 +352,21 @@ $(document).ready(function(){
 	bgMusic.play();
 	bgMusic.loop = true;
 
-	function randomColor(top) {	// Returns a random bright hex color
-		var colors = [0, 0, 0];
-		for (var x = 0; x < colors.length; x++) {
-			if (Math.random() < 0.5) {	// Quick boolean random, from jsFiddle
-				colors[x] = top;
-			} else {
-				colors[x] = "0";
-			}
-		}
+	function randomColor(top, prev, avoid, avoid2) {	// Returns a random bright hex color
+		var colors = [0, 0, 0];	// Initiate array
 
-		if (colors.join("") == top+top+top ||
-		colors.join("") == top+"00" ||
-		colors.join("") == "000") {
-			colors = [0, 0, top];
+		while (colors.join("") == top+top+top ||	// Avoid black and white
+		colors.join("") == "000" ||
+		colors.join("") == avoid ||	// Avoid x color
+		colors.join("") == avoid2 ||
+		"#" + colors.join("") == prev) {	// Avoid the last color
+			for (var x = 0; x < colors.length; x++) {
+				if (Math.random() < 0.5) {	  // Randomly choose x or 0 for the color
+					colors[x] = top;			// Then join them to make 'F00' for example
+				} else {
+					colors[x] = "0";
+				}
+			}
 		}
 
 		return "#" + colors.join("");
@@ -554,7 +557,6 @@ $(document).ready(function(){
 		alienDirection = "right";
 		alienY = "";
 		score = 0;
-		bgAlpha = "1";
 
 		timeLeft = 3;
 		textSize = 80;
