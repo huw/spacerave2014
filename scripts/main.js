@@ -39,8 +39,31 @@ $(document).ready(function(){
 	}, 350);	// Called every beat
 
 	var alertStart;
+	var alertAlpha;
+	var option;
+	var alertText = "";
+	var slowMo = false;
 	setInterval(function() {	// The Wheel of Spin!
-		if (window_focus) {
+		if (window_focus && elapsed > 60 * 3) {
+			if (slowMo === true) {
+				bulletSpeed *= 5;		// Reset the last one
+				alienBulletSpeed *= 5;
+				alienSpeed *= 5;
+				alienBulletInt /= 5;	// Inverted because we divide by this
+
+				aliens.forEach(function(alien) {
+					alien.speed *= 5;
+				});
+				alienBullets.forEach(function(bullet) {
+					bullet.speed *= 5;
+				});
+				bullets.forEach(function(bullet) {
+					bullet.speed *= 5;
+				});
+
+				slowMo = false;
+			}
+
 			option = Math.floor(Math.random() * 5);	// Choose a random number
 
 			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
@@ -61,7 +84,7 @@ $(document).ready(function(){
 						alien.speed += 0.3;
 					});
 					alienSpeed += 0.3;	// Speed up new aliens and bullets
-					alienBulletSpeed += 0.3;
+					alienBulletInt += 100;
 
 					alertText = "ALIEN SPEED & BULLETS UP!"
 					break;
@@ -84,6 +107,26 @@ $(document).ready(function(){
 					alertText = "BULLET ENHANCEMENTS!";
 
 					break;
+				case 4:
+					bulletSpeed /= 5;		// Slow. Everything. Down.
+					alienBulletSpeed /= 5;	// You are Neo.
+					alienSpeed /= 5;
+					alienBulletInt *= 5;
+
+					aliens.forEach(function(alien) {
+						alien.speed /= 5;
+					});
+					alienBullets.forEach(function(bullet) {
+						bullet.speed /= 5;
+					});
+					bullets.forEach(function(bullet) {
+						bullet.speed /= 5;
+					});
+
+					slowMo = true;
+
+					alertText = "SLOW MO!";
+					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
 					break;
@@ -92,7 +135,7 @@ $(document).ready(function(){
 			alertAlpha = 0.1;	// Reset our alert
 			alertStart = elapsed;
 		}
-	}, 2800);
+	}, 5600);
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
 	/* 	I kinda copied this bit from a canvas tutorial.
@@ -168,6 +211,8 @@ $(document).ready(function(){
 	var bulletWidth      = cWidth * 0.003;
 	var bulletHeight     = cWidth * 0.008;
 	var alienBulletWidth = cWidth * 0.004;
+
+	var alienBulletInt = 700;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active = true;
@@ -578,7 +623,7 @@ $(document).ready(function(){
 					y: aliens[randomAlien].y
 				}));
 				alienBulletThrottle = true;
-				setTimeout(function(){alienBulletThrottle = false;}, 700); // Shoot every two beats
+				setTimeout(function(){alienBulletThrottle = false;}, alienBulletInt); // Shoot every two beats
 			}
 		}
 
@@ -618,8 +663,15 @@ $(document).ready(function(){
 		timeLeft              = 3;
 		textSize              = 80;
 		numberY               = cHeight / 2 + 90;
+		bulletSpeed           = cHeight * 0.025;	// The speed is based on the height so users with tall screens have no advantage
 		alienBulletSpeed      = cHeight * 0.006;
-		alienSpeed            = Math.floor(cWidth * 0.003);
+		alienSpeed            = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
+		bulletWidth           = cWidth * 0.003;
+		bulletHeight          = cWidth * 0.008;
+		alienBulletWidth      = cWidth * 0.004;
+		alienBulletInt        = 700;
+		option                = 0;
+		slowMo                = false;
 	}
 
 	var timeLeft = 3;
