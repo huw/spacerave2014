@@ -141,9 +141,9 @@ $(document).ready(function(){
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
 
-		i.speed     = 20;
-		i.width     = 4;
-		i.height    = 10;
+		i.speed     = cHeight * 0.025;
+		i.width     = cWidth * 0.003;
+		i.height    = cWidth * 0.008;
 		i.color     = "#F0F";
 
 		i.draw = function() {
@@ -163,8 +163,8 @@ $(document).ready(function(){
 	function AlienBullet(i) {
 		i.active = true;
 
-		i.speed  = 5;
-		i.width  = 6;
+		i.speed  = cHeight * 0.006;
+		i.width  = cWidth * 0.004;
 		i.height = i.width;
 		i.color  = "#F00";
 
@@ -185,11 +185,11 @@ $(document).ready(function(){
 	function Alien(i) {	// Alien class constructor
 		i.active = true;
 
-		i.width = 30;
-		i.height = 30;
+		i.width = cWidth * 0.025;
+		i.height = i.width;
 		i.color = "#F00";
 		i.alpha = 1;
-		i.speed = 3;
+		i.speed = Math.floor(cWidth * 0.003);
 		i.state = "alive";
 
 		i.draw = function() {
@@ -202,7 +202,7 @@ $(document).ready(function(){
 			if (i.yDirection == "down") {
 				i.y += i.speed;
 
-				if (i.y >= i.originalY + 80) {
+				if (i.y >= i.originalY + cWidth * 0.0625) {
 					i.yDirection = "";
 				}
 			}
@@ -235,9 +235,9 @@ $(document).ready(function(){
 		color : "#0BF",
 		x     : cWidth / 2,
 		y     : cHeight - 60,
-		width : 30,
-		height: 30,
-		speed : 8,
+		width : cWidth * 0.025,	// Relative size
+		height: cWidth * 0.025,
+		speed : cWidth * 0.006,
 		alpha : 1,
 		state : "alive",
 		draw  : function() {
@@ -348,7 +348,7 @@ $(document).ready(function(){
 		for (var x = 0; x < 10; x++) {
 
 			aliens.push(Alien({
-				x: x * 80,
+				x: x * (cWidth * 0.0625),
 				y: 0
 			}));
 		}
@@ -588,7 +588,7 @@ $(document).ready(function(){
 		alienY = "";
 		score = 0;
 
-		ship.speed = 8;
+		ship.speed = cWidth * 0.006;
 
 		timeLeft = 3;
 		textSize = 80;
