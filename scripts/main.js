@@ -36,6 +36,7 @@ $(document).ready(function(){
 		bgColor = randomColor(bgAlpha, bgColor, bgAlpha + "00", "F0F");
 	}, 350);
 
+	var alertStart;
 	setInterval(function() {
 		option = Math.floor(Math.random() * 2);
 
@@ -46,11 +47,14 @@ $(document).ready(function(){
 		switch(option) {
 			case 0:
 				bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
-				alertText = "Rave Levels Up!";
+				alertText = "RAVE LEVELS UP!";
+				alertAlpha = 0.1;
 				break;
 			default:
 				break;
 		}
+
+		alertStart = elapsed;
 	}, 2800);
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
@@ -484,6 +488,18 @@ $(document).ready(function(){
 		score += 1;
 
 		bgMusic.play();
+
+		if (alertAlpha < 1 && alertText != "" && elapsed - alertStart < 100) {
+			alertAlpha += 0.1;
+		} else if (alertText != "" && elapsed - alertStart >= 100) {
+			alertAlpha -= 0.1;
+		}
+
+		if (alertAlpha <= 0) {
+			alertText = "";
+		}
+
+		console.log(elapsed - alertStart);
 	}
 
 	function draw() {
@@ -537,6 +553,11 @@ $(document).ready(function(){
 		canvas.fillStyle = "#FFF";
 		canvas.textAlign = "left";
 		canvas.fillText("SCORE:" + score, 10, 45);
+
+		canvas.font = "40px PressStart2P";
+		canvas.fillStyle = "rgba(255, 255, 255, " + alertAlpha + ")";
+		canvas.textAlign = "center";
+		canvas.fillText(alertText, cWidth / 2, 55);
 	}
 
 	function resetGame() {
