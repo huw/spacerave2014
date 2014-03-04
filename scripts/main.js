@@ -41,10 +41,10 @@ $(document).ready(function(){
 	var alertStart;
 	setInterval(function() {	// The Wheel of Spin!
 		if (window_focus) {
-			option = Math.floor(Math.random() * 4);	// Choose a random number
+			option = Math.floor(Math.random() * 5);	// Choose a random number
 
 			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
-				option = Math.floor(Math.random() * 4);
+				option = Math.floor(Math.random() * 5);
 			}
 
 			switch(option) {	// Do something depending on the random number
@@ -58,12 +58,31 @@ $(document).ready(function(){
 					break;
 				case 2:
 					aliens.forEach(function(alien) {	// This one speeds up aliens
-						alien.speed += 0.5;
+						alien.speed += 0.3;
 					});
-					alienSpeed += 0.5;	// Speed up new aliens and bullets
-					alienBulletSpeed += 0.5;
+					alienSpeed += 0.3;	// Speed up new aliens and bullets
+					alienBulletSpeed += 0.3;
 
 					alertText = "ALIEN SPEED & BULLETS UP!"
+					break;
+				case 3:
+					bulletSpeed      += 1;
+					bulletWidth      += 1;
+					bulletHeight     += 1;
+					alienBulletWidth += 1;
+
+					bullets.forEach(function(bullet) {
+						bullet.speed  += 1;
+						bullet.width  += 1;
+						bullet.height += 1;
+					});
+					alienbBullets.forEach(function(bullet) {
+						bullet.width  += 1;
+						bullet.height += 1;
+					});
+
+					alertText = "BULLET ENHANCEMENTS!";
+
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -143,15 +162,19 @@ $(document).ready(function(){
 
 	var bgAlpha = "1";
 
+	var bulletSpeed      = cHeight * 0.025;	// The speed is based on the height so users with tall screens have no advantage
 	var alienBulletSpeed = cHeight * 0.006;
 	var alienSpeed       = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
+	var bulletWidth      = cWidth * 0.003;
+	var bulletHeight     = cWidth * 0.008;
+	var alienBulletWidth = cWidth * 0.004;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active = true;
 
-		i.speed  = cHeight * 0.025;	// The speed is based on the height so users with tall screens have no advantage
-		i.width  = cWidth * 0.003;	// We base the size on width because
-		i.height = cWidth * 0.008;	// width is more likely to represent screen size
+		i.speed  = bulletSpeed;
+		i.width  = bulletWidth;	// We base the size on width because
+		i.height = bulletHeight;	// width is more likely to represent screen size
 		i.colour = "#F0F";
 
 		i.draw = function() {
@@ -172,7 +195,7 @@ $(document).ready(function(){
 		i.active = true;
 		
 		i.speed  = alienBulletSpeed;	// Alien bullets are pretty much the same as normal ones
-		i.width  = cWidth * 0.004;
+		i.width  = alienBulletWidth;
 		i.height = i.width;
 		i.colour = "#F00";
 
@@ -562,7 +585,7 @@ $(document).ready(function(){
 		canvas.font = "30px PressStart2P";	// Print our score
 		canvas.fillStyle = "#FFF";
 		canvas.textAlign = "left";
-		canvas.fillText("SCORE:" + score, 10, 45);
+		canvas.fillText("SCORE:" + score, 10, cHeight);
 
 		canvas.font = "40px PressStart2P";	// Print the latest alert
 		canvas.fillStyle = "rgba(255, 255, 255, " + alertAlpha + ")";
