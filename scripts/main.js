@@ -1,67 +1,67 @@
 $(document).ready(function(){
 	/****** INITIAL DEFINITION *****/
-	var cWidth = $(window).innerWidth() - 5;
-	var cHeight = $(window).innerHeight() - 5;
+	var cWidth = $(window).innerWidth() - 5;	// Make the canvas width most of the window size
+	var cHeight = $(window).innerHeight() - 5;	// The extra five is so arrow keys don't scroll the document
 
-	$('canvas').attr('width', cWidth);	// Resize the canvas
+	$('canvas').attr('width', cWidth);		// Resize the canvas to our screen dimensions
 	$('canvas').attr('height', cHeight);
 
 	var canvas = document.getElementById("canvas").getContext("2d");	// Pull our canvas
 
 	/****** INITIATE CANVAS ******/
-	var elapsed = 0;
+	var elapsed = 0;	// Amount of frames elapsed this game
 	var window_focus = true;
 
 	setInterval(function() {	// Draw and update every frame
-		$(window).focus(function(){window_focus = true; bgMusic.play()});
-		$(window).blur(function(){window_focus = false; bgMusic.pause();});
+		$(window).focus(function(){window_focus = true; bgMusic.play()});	// Called when the window is in focus
+		$(window).blur(function(){window_focus = false; bgMusic.pause();});	// Called when the window isn't
 
-		if (window_focus && bgMusic.readyState == 4) {
-			if (elapsed > 60 * 3) {
-				update();
+		if (window_focus && bgMusic.readyState == 4) {	// If the window is focused & the music is ready to play
+			if (elapsed > 60 * 3) {	// After the 3 second countdown
+				update();	// The big two. These do (almost) everything.
 				draw();
 			} else if (elapsed == 0) {
-				canvas.clearRect(0, 0, cWidth, cHeight);
-			} else if (elapsed == 60 * 3) {
+				canvas.clearRect(0, 0, cWidth, cHeight);	// Clear the canvas when we reset
+			} else if (elapsed == 60 * 3) {	// Reset once, right before we play
 				resetGame();
 			} else {
-				beginRave();
+				beginRave();	// Display the countdown if we're not playing or resetting
 			}
-			elapsed++;
+			elapsed++;	// Should be obvious
 		}
-	}, 1000/60);	// The number we divide by is the FPS
+	}, 1000/60);	// Divide 1 second by our FPS
 
-	var bgColor;
+	var bgColour;
 	setInterval(function() {
 		if (window_focus) {
-			bgColor = randomColor(bgAlpha, bgColor, bgAlpha + "00", "F0F");
+			bgColour = randomColour(bgAlpha, bgColour, bgAlpha + "00", "F0F");	// Change the background colour
 		}
-	}, 350);
+	}, 350);	// Called every beat
 
 	var alertStart;
-	setInterval(function() {
+	setInterval(function() {	// The Wheel of Spin!
 		if (window_focus) {
-			option = Math.floor(Math.random() * 3);
+			option = Math.floor(Math.random() * 3);	// Choose a random number
 
-			while (option == 0 && bgAlpha == "f") {	// Don't raise it above FFFFFF
+			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
 				option = Math.floor(Math.random() * 3);
 			}
 
-			switch(option) {
+			switch(option) {	// Do something depending on the random number
 				case 0:
-					bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);
+					bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);	// This one raises a base 16 number by 1
 					alertText = "RAVE LEVELS UP!";
 					break;
 				case 1:
-					ship.speed += 0.5;
+					ship.speed += 0.5;	// This one raises our movement speed a little
 					alertText = "MOVE FASTER!";
 					break;
 				default:
-					alertText = "NO BONUS :(";
+					alertText = "NO BONUS.";	// This is just to make people sad
 					break;
 			}
 
-			alertAlpha = 0.1;
+			alertAlpha = 0.1;	// Reset our alert
 			alertStart = elapsed;
 		}
 	}, 2800);
@@ -72,15 +72,12 @@ $(document).ready(function(){
 		experience */
 	$(function() {
 		window.keydown = {};
-
 		function keyName(event) {
 			return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
 		}
-
 		$(document).bind("keydown", function(event) {
 			keydown[keyName(event)] = true;
 		});
-
 		$(document).bind("keyup", function(event) {
 			keydown[keyName(event)] = false;
 		});
@@ -117,21 +114,20 @@ $(document).ready(function(){
 	}
 
 	/****** DEFINE VARIABLES ******/
-	var bullets      = [];
-	var alienBullets = [];
-	var aliens       = [];
+	var bullets      = [];	// We have a bunch of arrays.
+	var alienBullets = [];	// These store things like
+	var aliens       = [];	// aliens, stars and bullets.
 	var stars        = [];
 
 	var bulletThrottle        = false;
 	var alienBulletThrottle   = false;
 	var alienGenerateThrottle = false;
-	var alienDirection        = "right";
 
-	var alienY = "";
-	var score  = 0;
-	var bumps  = 0;
+	var alienDirection = "right";
+	var alienY         = "";
+	var score          = 0;
 
-	var arrowsUsed = false;
+	var arrowsUsed = false;	// These change when we use the input
 	var wasdUsed   = false;
 	var spaceUsed  = false;
 	var clickUsed  = false;
@@ -139,22 +135,22 @@ $(document).ready(function(){
 	var bgAlpha = "1";
 
 	function Bullet(i) {	// Bullet class constructor
-		i.active    = true;
+		i.active = true;
 
-		i.speed     = cHeight * 0.025;
-		i.width     = cWidth * 0.003;
-		i.height    = cWidth * 0.008;
-		i.color     = "#F0F";
+		i.speed  = cHeight * 0.025;	// The speed is based on the height so users with tall screens have no advantage
+		i.width  = cWidth * 0.003;	// We base the size on width because
+		i.height = cWidth * 0.008;	// width is more likely to represent screen size
+		i.colour = "#F0F";
 
 		i.draw = function() {
-			canvas.fillStyle = this.color;
+			canvas.fillStyle = this.colour;
 			canvas.fillRect(this.x, this.y, this.width, this.height);
 		}
 
 		i.update = function() {
 			i.y -= i.speed;
 
-			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
+			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;	// Only declare as active if its inside screen
 		}
 
 		return i;
@@ -162,14 +158,14 @@ $(document).ready(function(){
 
 	function AlienBullet(i) {
 		i.active = true;
-
-		i.speed  = cHeight * 0.006;
+		
+		i.speed  = cHeight * 0.006;	// Alien bullets are pretty much the same as normal ones
 		i.width  = cWidth * 0.004;
 		i.height = i.width;
-		i.color  = "#F00";
+		i.colour = "#F00";
 
 		i.draw = function() {
-			canvas.fillStyle = this.color;
+			canvas.fillStyle = this.colour;
 			canvas.fillRect(this.x, this.y, this.width, this.height);
 		}
 
@@ -185,44 +181,44 @@ $(document).ready(function(){
 	function Alien(i) {	// Alien class constructor
 		i.active = true;
 
-		i.width = cWidth * 0.025;
-		i.height = i.width;
-		i.color = "#F00";
-		i.alpha = 1;
-		i.speed = Math.floor(cWidth * 0.003);
-		i.state = "alive";
+		i.width  = cWidth * 0.025;	// A lot of the game revolves around them
+		i.height = i.width;			// being equal between screens
+		i.colour = "#F00";
+		i.alpha  = 1;
+		i.speed  = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
+		i.state  = "alive";	// This is a determinator for animations
 
 		i.draw = function() {
-			canvas.globalAlpha = this.alpha;
-			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);
-			canvas.globalAlpha = 1;
+			canvas.globalAlpha = this.alpha;	// Helps with fade out effect
+			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
+			canvas.globalAlpha = 1;	// Reset this so we don't draw everything else transparent
 		}
 
 		i.update = function() {
-			if (i.yDirection == "down") {
+			if (i.yDirection == "down") {	// This is a little hacky.
 				i.y += i.speed;
 
-				if (i.y >= i.originalY + cWidth * 0.0625) {
+				if (i.y >= i.originalY + cWidth * 0.0625) {	// If it has moved down about 80px, then stop moving
 					i.yDirection = "";
 				}
 			}
 
-			if (alienDirection == "left") {
+			if (alienDirection == "left") {	// Move as told to
 				i.x -= i.speed;
 			} else if (alienDirection == "right") {
 				i.x += i.speed;
 			}
 		}
 
-		i.direction = function() {
+		i.direction = function() {	// Which way should we be going?
 			if (i.x < 0) {
 				alienDirection = "right";
 
-				aliens.forEach(function(alien) {
-					alien.x += alien.speed;
+				aliens.forEach(function(alien) {	// This moves the bottom row outta the way
+					alien.x += alien.speed;			// so new aliens don't misalign
 				});
 
-				alienGenerateThrottle = false;
+				alienGenerateThrottle = false;	// Determinator for new aliens
 			} else if (i.x > cWidth - i.width) {
 				alienDirection = "left";
 			}
@@ -232,25 +228,25 @@ $(document).ready(function(){
 	}
 
 	var ship = {	// Ship object constructor. It doesn't need to be a function
-		color : "#0BF",
-		x     : cWidth / 2,
+		colour: "#0BF",
+		x     : cWidth / 2,	// Start at about the middle-bottom
 		y     : cHeight - 60,
-		width : cWidth * 0.025,	// Relative size
+		width : cWidth * 0.025,	// You know the drill with relative sizing
 		height: cWidth * 0.025,
 		speed : cWidth * 0.006,
 		alpha : 1,
 		state : "alive",
 		draw  : function() {
-			this.x += Math.random() - 0.5;
-			this.y += Math.random() - 0.5;
+			this.x += Math.random() - 0.5;	// Jitter it a little
+			this.y += Math.random() - 0.5;	// Looks like its moving really fast
 
 			canvas.globalAlpha = this.alpha;
 			canvas.drawImage(document.getElementById("ship"), this.x, this.y, this.width, this.height);
 			canvas.globalAlpha = 1;
 		},
-		shoot : function() {
+		shoot : function() {	// Shoots bullets!
 			bullets.push(Bullet({
-				x: (this.x + this.width / 2) - Math.random() * 4,	// Quick random modifier for fun
+				x: (this.x + this.width / 2) - Math.random() * 4,	// Fire bullets from slightly random spots
 				y: this.y
 			}));
 		}
@@ -259,33 +255,33 @@ $(document).ready(function(){
 	function Star(i) {
 		i.active = true;
 
-		i.x = Math.random() * cWidth;
-		i.width = Math.random() * 4;
+		i.x      = Math.random() * cWidth;	// Start somewhere at the top
+		i.width  = Math.random() * 4;
 		i.height = i.width;
-		i.speed = 5 + (i.width * 5);
-		i.color = "#CCC";
-
-		i.draw = function() {
-			canvas.fillStyle = this.color;
+		i.speed  = 5 + (i.width * 5);	// Closer (bigger) stars move faster right?
+		i.colour = "#CCC";
+		
+		i.draw   = function() {
+			canvas.fillStyle = this.colour;
 			canvas.fillRect(this.x, this.y, this.width, this.height);
 		}
-
+		
 		i.update = function() {
 			i.y += i.speed;
-
+		
 			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
 		}
 
 		return i;
 	}
 
-	for (var x = 0; x < 40; x++) {
+	for (var x = 0; x < 40; x++) {	// We need to start with initial stars else it looks stupid
 		stars.push(Star({
 			y: Math.random() * cHeight
 		}));
 	}
 
-	function collides(a, b) {	// Collision detection
+	function collides(a, b) {	// Collision detection. Very simple, works beautifully.
 		return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 	}
 
@@ -293,10 +289,10 @@ $(document).ready(function(){
 		bullets.forEach(function(bullet) {	// If we shoot alien
 			aliens.forEach(function(alien) {
 				if (collides(bullet, alien)) {
-					bullet.active = false;
+					bullet.active = false;	// Don't display the bullet
 
-					if (aliens.length > 1) {
-						alien.state = "dying";
+					if (aliens.length > 1) {	// Prevent us from killing the last alien. This game is infinite.
+						alien.state = "dying";	// Don't display the alien
 					}
 				}
 			});
@@ -304,7 +300,7 @@ $(document).ready(function(){
 
 		aliens.forEach(function(alien) {	// If we smash into an alien
 			if (collides(ship, alien)) {
-				alien.state = "dying";
+				alien.state = "dying";	// Kill us both
 				ship.state = "dying";
 			}
 		});
@@ -323,22 +319,18 @@ $(document).ready(function(){
 	}
 
 	function killObject(object) {
-		object.alpha -= 0.04
+		object.alpha -= 0.004 	// We fade away
 
-		if (object.alpha < 0.01) {
-			object.state = "dead";
-			object.active = false;
+		if (object.alpha < 0.01) {	// If we've faded
+			object.state = "dead";	// We die
+			object.active = false;	// Goodbye
 
-			if (object == ship) {
-				firstTry = false;
-				elapsed  = 0;
-
-				bgMusic.pause()	// Reset some variables
-				bgMusic.currentTime = 0;
-				bgAlpha = "1";
+			if (object == ship) {	// This is us. We're dead.
+				firstTry = false;	// We're not green anymore
+				elapsed  = 0;		// Start from the beginning
 
 				if (score > highScore) {
-					createCookie("highscore", score + 1, "90");
+					createCookie("highscore", score + 1, "90");	// Improvements.
 				}
 			}
 		}
@@ -346,75 +338,58 @@ $(document).ready(function(){
 
 	function pushAlienRow() {
 		for (var x = 0; x < 10; x++) {
-
 			aliens.push(Alien({
-				x: x * (cWidth * 0.0625),
+				x: x * (cWidth * 0.0625),	// Add a space between each one
 				y: 0
 			}));
 		}
 
 		aliens.forEach(function(alien) {
-			alien.originalY = alien.y;
+			alien.originalY = alien.y;	// Move everyone down a little
 			alien.yDirection = "down";
 		});
 
-		alienGenerateThrottle = false;
+		alienGenerateThrottle = false;	// I removed this and it broke. IDK.
 	}
 
 	bgMusic = document.getElementById('bg');
 	bgMusic.play();
-	bgMusic.loop = true;
+	bgMusic.loop = true;	// OOOH MUSIC!
 
-	function randomColor(top, prev, avoid, avoid2) {	// Returns a random bright hex color
+	function randomColour(top, prev, avoid, avoid2) {	// Returns a random bright hex colour
 		var colors = [0, 0, 0];	// Initiate array
 
 		while (colors.join("") == top+top+top ||	// Avoid black and white
 		colors.join("") == "000" ||
-		colors.join("") == avoid ||	// Avoid x color
+		colors.join("") == avoid ||	// Avoid x colour
 		colors.join("") == avoid2 ||
-		"#" + colors.join("") == prev) {	// Avoid the last color
+		"#" + colors.join("") == prev) {	// Avoid the last colour
 			for (var x = 0; x < colors.length; x++) {
-				if (Math.random() < 0.5) {	  // Randomly choose x or 0 for the color
-					colors[x] = top;			// Then join them to make 'F00' for example
+				if (Math.random() < 0.5) {	  // Randomly choose x or 0 for the colour
+					colors[x] = top;		  // Then join them to make 'F00' for example
 				} else {
 					colors[x] = "0";
 				}
 			}
 		}
 
-		return "#" + colors.join("");
+		return "#" + colors.join("");	// Push back a valid hex colour
 	};
 
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
-		if (ship.state == "alive") {
-			if (keydown.left || keydown.a) {
+		if (ship.state == "alive") {	// You can't move when you're dead
+			if (keydown.left || keydown.a) {	// Detect movement keys, move appropriately
 				ship.x -= ship.speed;
-
-				if (ship.x <= 0) {	// Reset position if we go out of bounds
-					ship.x = 0;
-				}
 			} else if (keydown.right || keydown.d) {
 				ship.x += ship.speed;
-
-				if (ship.x >= cWidth - ship.width) {
-					ship.x = cWidth - ship.width;
-				}
 			} else if (keydown.up || keydown.w) {
 				ship.y -= ship.speed;
-
-				if (ship.y <= 0) {
-					ship.y = 0;
-				}
 			} else if (keydown.down || keydown.s) {
 				ship.y += ship.speed;
+			}	// BTW, this is in a else if because diagonal movement was too fast
 
-				if (ship.y >= cHeight - ship.height) {
-					ship.y = cHeight - ship.height;
-				}
-			}
-
-			if (keydown.left || keydown.right || keydown.up || keydown.down) {
+			if (keydown.left || keydown.right || keydown.up || keydown.down) {	// Help us track some stuff
 				arrowsUsed = true;
 			}
 
@@ -428,11 +403,11 @@ $(document).ready(function(){
 				if (bulletThrottle === false) {	// If we haven't shot recently
 					ship.shoot();
 					bulletThrottle = true;
-					setTimeout(function(){bulletThrottle = false;}, 350);	// Don't let us shoot until 300ms
+					setTimeout(function(){bulletThrottle = false;}, 350);	// Shoot on the beat
 				}
 			}
 
-			$("#canvas").click(function(e){
+			$("#canvas").click(function(e){	// Same thing as above except somewhat clickier
 				clickUsed = true;
 
 			    if (bulletThrottle === false) {
@@ -441,6 +416,22 @@ $(document).ready(function(){
 			    	setTimeout(function(){bulletThrottle = false;}, 350);
 			    }
 			});
+		}
+
+		if (ship.x <= 0) {	// Reset position if we go out of bounds
+			ship.x = 0;
+		}
+
+		if (ship.x >= cWidth - ship.width) {	// Same thing
+			ship.x = cWidth - ship.width;
+		}
+
+		if (ship.y <= 0) {
+			ship.y = 0;
+		}
+
+		if (ship.y >= cHeight - ship.height) {
+			ship.y = cHeight - ship.height;
 		}
 
 		bullets.forEach(function(bullet) {	// For each bullet, call its update method
@@ -494,21 +485,19 @@ $(document).ready(function(){
 			killObject(ship);
 		}
 
-		score += 1;
+		score += 1;	// Add to the score!
 
-		bgMusic.play();
+		bgMusic.play();	// Play music!
 
-		if (alertAlpha < 1 && alertText != "" && elapsed - alertStart < 100) {
+		if (alertAlpha < 1 && alertText != "" && elapsed - alertStart < 100) {	// Fade text in
 			alertAlpha += 0.1;
-		} else if (alertText != "" && elapsed - alertStart >= 100) {
+		} else if (alertText != "" && elapsed - alertStart >= 100) {	// Fade text out after that
 			alertAlpha -= 0.1;
 		}
 
-		if (alertAlpha <= 0.1) {
+		if (alertAlpha <= 0.1) {	// Reset text when it's faded
 			alertText = "";
 		}
-
-		console.log(elapsed - alertStart);
 	}
 
 	function draw() {
@@ -518,10 +507,10 @@ $(document).ready(function(){
 		and finally the bullets */
 
 		canvas.clearRect(0, 0, cWidth, cHeight);
-		canvas.fillStyle = bgColor;
-		canvas.fillRect(0, 0, cWidth, cHeight);
+		canvas.fillStyle = bgColour;
+		canvas.fillRect(0, 0, cWidth, cHeight);	// Background colour!
 
-		if (ship.state != "dead") {
+		if (ship.state != "dead") {	// Draw unless we did died
 			ship.draw();
 		}
 
@@ -541,29 +530,29 @@ $(document).ready(function(){
 			bullet.draw();
 		});
 
-		stars.push(Star({
+		stars.push(Star({	// Add a star every frame
 			y: 0
 		}));
 
-		if (alienBulletThrottle === false) {
+		if (alienBulletThrottle === false) {	// Aliens shoot
 			if (aliens[0]) {
-				var randomAlien = Math.floor(Math.random() * aliens.length);
+				var randomAlien = Math.floor(Math.random() * aliens.length);	// Random alien shoots
 
 				alienBullets.push(AlienBullet({
 					x: aliens[randomAlien].x,
 					y: aliens[randomAlien].y
 				}));
 				alienBulletThrottle = true;
-				setTimeout(function(){alienBulletThrottle = false;}, 700);
+				setTimeout(function(){alienBulletThrottle = false;}, 700); // Shoot every two beats
 			}
 		}
 
-		canvas.font = "30px PressStart2P";
+		canvas.font = "30px PressStart2P";	// Print our score
 		canvas.fillStyle = "#FFF";
 		canvas.textAlign = "left";
 		canvas.fillText("SCORE:" + score, 10, 45);
 
-		canvas.font = "40px PressStart2P";
+		canvas.font = "40px PressStart2P";	// Print the latest alert
 		canvas.fillStyle = "rgba(255, 255, 255, " + alertAlpha + ")";
 		canvas.textAlign = "center";
 		canvas.fillText(alertText, cWidth / 2, 55);
@@ -571,28 +560,29 @@ $(document).ready(function(){
 
 	function resetGame() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
+		
+		ship.x     = cWidth / 2;	// We must rebuild him!
+		ship.y     = cHeight - 60;
+		ship.alpha = 1;
+		ship.state = "alive";	// Back from the dead!
 
-		ship.x      = cWidth / 2;	// We must rebuild him!
-		ship.y      = cHeight - 60;
-		ship.alpha  = 1;
-		ship.state  = "alive";	// Back from the dead!
-
-		aliens = [];	// Clearing these arrays works because they're either
-		bullets = [];	// initially rebuilt or rebuilt on frame
+		aliens       = [];	// Clearing these arrays works because they're either
+		bullets      = [];	// initially rebuilt or rebuilt on frame
 		alienBullets = [];
 
-		bulletThrottle = false;
-		alienBulletThrottle = false;
-		alienGenerateThrottle = false;
-		alienDirection = "right";
-		alienY = "";
-		score = 0;
-
-		ship.speed = cWidth * 0.006;
-
-		timeLeft = 3;
-		textSize = 80;
-		numberY  = cHeight / 2 + 90;
+		bulletThrottle        = false;	// Reset
+		alienBulletThrottle   = false;	// Every
+		alienGenerateThrottle = false;	// Changed
+		alienDirection        = "right";// Variable
+		alienY                = "";
+		score                 = 0;
+		bgMusic.pause()
+		bgMusic.currentTime   = 0;
+		bgAlpha               = "1";
+		ship.speed            = cWidth * 0.006;
+		timeLeft              = 3;
+		textSize              = 80;
+		numberY               = cHeight / 2 + 90;
 	}
 
 	var timeLeft = 3;
@@ -602,14 +592,14 @@ $(document).ready(function(){
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
-		highScore = getCookie("highscore");
+		highScore = getCookie("highscore");	// Grabbin scores
 
 		if (firstTry) {
 			textColor = "#FFF";
-			var textBody  = "BEGIN RAVE";
+			var textBody  = "BEGIN RAVE";	// Intro screen FTW
 		} else {
 			textColor = "#F00";
-			var textBody  = "GAME OVER";
+			var textBody  = "GAME OVER";	// You only lost if you were there
 		}
 
 		canvas.font = "80px PressStart2P";
@@ -617,22 +607,22 @@ $(document).ready(function(){
 		canvas.textAlign = 'center';
 		canvas.fillText(textBody, cWidth / 2, cHeight / 2 - 80);
 
-		if (elapsed % 60 == 0) {
+		if (elapsed % 60 == 0) {	// If a second passes
 			timeLeft--;
 		}
 
-		textSize += 0.4;
-		numberY  += 0.2;
+		textSize += 0.4;	// Text gets bigger
+		numberY  += 0.2;	// from the center point
 
-		if (!firstTry) {
+		if (!firstTry) {	// Only show score if we got one
 			canvas.font = "40px PressStart2P";
 			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + 180);
 		}
 
-		canvas.font = "25px PressStart2P";
+		canvas.font = "25px PressStart2P";	// Highscores here
 		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + 230)
 
-		canvas.font = textSize + "px PressStart2P";
+		canvas.font = textSize + "px PressStart2P";	// Show us the time left in seconds
 		canvas.fillText(timeLeft, cWidth / 2, numberY);
 
 		canvas.font = "20px PressStart2P";
@@ -699,6 +689,6 @@ $(document).ready(function(){
 			}
 		}
 
-		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 270);
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 270);	// Fill the tutorial text
 	}
 });
