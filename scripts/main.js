@@ -33,7 +33,7 @@ $(document).ready(function(){
 
 	var bgColor;
 	setInterval(function() {
-		bgColor = randomColor(bgAlpha, bgColor, "F00", "F0F");
+		bgColor = randomColor(bgAlpha, bgColor, bgAlpha + "00", "F0F");
 	}, 350);
 
 	setInterval(function() {
@@ -123,7 +123,7 @@ $(document).ready(function(){
 	var spaceUsed  = false;
 	var clickUsed  = false;
 
-	var bgAlpha     = "1";
+	var bgAlpha = "1";
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active    = true;
