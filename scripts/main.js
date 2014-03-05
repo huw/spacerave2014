@@ -31,7 +31,7 @@ $(document).ready(function(){
 			}
 
 			var muteThrottle = true;
-			setTimeout(function(){muteThrottle = false;}, 300);
+			setTimeout(function(){muteThrottle = false;}, 1000);
 		}
 
 		if (window_focus && bgMusic.readyState == 4) {	// If the window is focused & the music is ready to play
@@ -759,10 +759,45 @@ $(document).ready(function(){
 		if (!firstTry) {	// Only show score if we got one
 			canvas.font = "40px PressStart2P";
 			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + 180);
+
+			canvas.font = "25px PressStart2P";
+			canvas.fillStyle = "#55ACEE";
+			canvas.fillText("Press T to tweet your score!", cWidth / 2, cHeight / 2 + 220);
+
+			canvas.fillStyle = "#F00";
+
+			if (keydown.t) {
+				var scoreDescription;
+
+				if (score < 10) {
+					scoreDescription = "a%20now-proven%20possible";
+				} else if (score < 100) {
+					scoreDescription = "a%20downright%20terrible";
+				} else if (score < 1000) {
+					scoreDescription = "a%20reasonably%20decent";
+				} else if (score < 3000) {
+					scoreDescription = "an%20altogether%20average";
+				} else if (score < 6000) {
+					scoreDescription = "a%20pretty%20good%20yet%20improvable";
+				} else if (score < 9000) {
+					scoreDescription = "a%20hands-down%20impressive";
+				} else if (score < 14000) {
+					scoreDescription = "a%20totally%20awesome";
+				} else if (score < 20000) {
+					scoreDescription = "an%20extremely%20commendable";
+				} else if (score < 30000) {
+					scoreDescription = "a%20nobel-prize-worthy";
+				} else {
+					scoreDescription = "a%20laws-of-physics%2Fsanity-breaking";
+				}
+
+				var twitterIntent = "https://twitter.com/intent/tweet?text=I%20got%20" + scoreDescription + "%20score%20of%20" + score + "%20in%20%23spacerave2014%20@&url=https%3A%2F%2Fhuw.github.io";
+				window.open(twitterIntent, "Tweet your score");
+			}
 		}
 
 		canvas.font = "25px PressStart2P";	// Highscores here
-		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + 230)
+		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + 260)
 
 		canvas.font = textSize + "px PressStart2P";	// Show us the time left in seconds
 		canvas.fillText(timeLeft, cWidth / 2, numberY);
@@ -831,6 +866,6 @@ $(document).ready(function(){
 			}
 		}
 
-		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 270);	// Fill the tutorial text
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 290);	// Fill the tutorial text
 	}
 });
