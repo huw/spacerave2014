@@ -399,6 +399,10 @@ $(document).ready(function(){
 				if (collides(bullet, alien)) {
 					bullet.active = false;	// Don't display the bullet
 					alien.state = "dying";	// Don't display the alien
+
+					if (aliens.length <= 1) {
+						alienGenerateThrottle = false;
+					}
 				}
 			});
 		});
@@ -574,10 +578,7 @@ $(document).ready(function(){
 			alien.direction();
 		});
 
-		if (aliens.length == 0) {
-			pushAlienRow();
-			alienGenerateThrottle = true;
-		} else if (alienGenerateThrottle === false) {
+		if (alienGenerateThrottle === false) {
 			pushAlienRow();
 			alienGenerateThrottle = true;
 		}
