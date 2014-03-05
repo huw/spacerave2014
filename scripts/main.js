@@ -314,7 +314,7 @@ $(document).ready(function(){
 			if (i.yDirection == "down") {	// This is a little hacky.
 				i.y += i.speed;
 
-				if (i.y >= i.originalY + cWidth * 0.0625) {	// If it has moved down about 80px, then stop moving
+				if (i.y >= i.originalY + Math.floor(cWidth * 0.0625)) {	// If it has moved down about 80px, then stop moving
 					i.yDirection = "";
 				}
 			}
@@ -329,7 +329,7 @@ $(document).ready(function(){
 		i.direction = function() {	// Which way should we be going?
 			if (i.x <= 0) {
 				if (firstRow) {
-					aliens.forEach(function(alien){alien.x += Math.floor(cWidth / 960);})
+					aliens.forEach(function(alien){alien.x += Math.floor(cWidth * 0.003) * 0.4;})
 					firstRow = false;
 				}
 				pushAlienRow();
