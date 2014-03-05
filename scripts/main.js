@@ -399,10 +399,6 @@ $(document).ready(function(){
 				if (collides(bullet, alien)) {
 					bullet.active = false;	// Don't display the bullet
 					alien.state = "dying";	// Don't display the alien
-
-					if (aliens.length <= 1) {
-						pushAlienRow();
-					}
 				}
 			});
 		});
@@ -576,9 +572,14 @@ $(document).ready(function(){
 			alien.direction();
 		});
 
-		aliens = aliens.filter(function(alien) {	// Cut star list down
+		aliens = aliens.filter(function(alien) {	// Cut aliens
 			return alien.active;
 		});
+
+		if (aliens.length == 0) {
+			pushAlienRow();
+			alienDirection = "right";
+		}
 
 		stars.forEach(function(star) {
 			star.update();
