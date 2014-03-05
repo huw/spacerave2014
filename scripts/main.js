@@ -563,13 +563,12 @@ $(document).ready(function(){
 			alien.direction();
 		});
 
-		if (alienGenerateThrottle === false) {
+		if (aliens.length == 0) {
 			pushAlienRow();
 			alienGenerateThrottle = true;
-		}
-
-		if (aliens.length == 0) {
-			alienGenerateThrottle = false;
+		} else if (alienGenerateThrottle === false) {
+			pushAlienRow();
+			alienGenerateThrottle = true;
 		}
 
 		aliens = aliens.filter(function(alien) {	// Cut star list down
