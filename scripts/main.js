@@ -23,17 +23,6 @@ $(document).ready(function(){
 		$(window).focus(function(){window_focus = true; bgMusic.play()});	// Called when the window is in focus
 		$(window).blur(function(){window_focus = false; bgMusic.pause();});	// Called when the window isn't
 
-		if (keydown.m && !muteThrottle) {	// Mute music
-			if (!bgMusic.muted){
-				bgMusic.muted = true;
-			} else if (bgMusic.muted){
-				bgMusic.muted = false;
-			}
-
-			var muteThrottle = true;
-			setTimeout(function(){muteThrottle = false;}, 1000);
-		}
-
 		if (window_focus && bgMusic.readyState == 4) {	// If the window is focused & the music is ready to play
 			if (elapsed > 60 * 3) {	// After the 3 second countdown
 				update();	// The big two. These do (almost) everything.
@@ -50,9 +39,25 @@ $(document).ready(function(){
 	}, 1000/60);	// Divide 1 second by our FPS
 
 	var bgColour;
+	var muteThrottle = false;
 	setInterval(function() {
 		if (window_focus) {
 			bgColour = randomColour(bgAlpha, bgColour, bgAlpha + "00", "F0F");	// Change the background colour
+		}
+
+		if (keydown.m && !muteThrottle) {	// Mute music
+			if (bgMusic.muted){
+				bgMusic.muted = false;
+
+				createCookie("muted", false, 2);
+			} else {
+				bgMusic.muted = true;
+
+				createCookie("muted", false, 2);
+			}
+
+			muteThrottle = true;
+			setTimeout(function(){muteThrottle = false;}, 400);
 		}
 	}, 350);	// Called every beat
 
