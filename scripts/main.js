@@ -216,7 +216,7 @@ $(document).ready(function(){
 
 	var bulletThrottle        = false;
 	var alienBulletThrottle   = false;
-	var alienGenerateThrottle = false;
+	pushAlienRow();
 
 	var alienDirection = "right";
 	var alienY         = "";
@@ -325,7 +325,7 @@ $(document).ready(function(){
 					alien.x += alien.speed;			// so new aliens don't misalign
 				});
 
-				alienGenerateThrottle = false;	// Determinator for new aliens
+				pushAlienRow();
 			} else if (i.x > cWidth - i.width) {
 				alienDirection = "left";
 			}
@@ -401,7 +401,7 @@ $(document).ready(function(){
 					alien.state = "dying";	// Don't display the alien
 
 					if (aliens.length <= 1) {
-						alienGenerateThrottle = false;
+						pushAlienRow();
 					}
 				}
 			});
@@ -464,8 +464,6 @@ $(document).ready(function(){
 			alien.originalY = alien.y;	// Move everyone down a little
 			alien.yDirection = "down";
 		});
-
-		alienGenerateThrottle = true;	// I removed this and it broke. IDK.
 	}
 
 	bgMusic = document.getElementById('bg');
@@ -577,11 +575,6 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {
 			alien.direction();
 		});
-
-		if (alienGenerateThrottle === false) {
-			pushAlienRow();
-			alienGenerateThrottle = true;
-		}
 
 		aliens = aliens.filter(function(alien) {	// Cut star list down
 			return alien.active;
