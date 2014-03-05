@@ -62,6 +62,7 @@ $(document).ready(function(){
 				alienBulletSpeed *= 5;
 				alienSpeed *= 5;
 				alienBulletInt /= 5;	// Inverted because we divide by this
+				starModifier *= 5;
 
 				aliens.forEach(function(alien) {
 					alien.speed *= 5;
@@ -71,6 +72,9 @@ $(document).ready(function(){
 				});
 				bullets.forEach(function(bullet) {
 					bullet.speed *= 5;
+				});
+				stars.forEach(function(star) {
+					star.speed *= 5;
 				});
 
 				slowMo = false;
@@ -85,7 +89,7 @@ $(document).ready(function(){
 			switch(option) {	// Do something depending on the random number
 				case 0:
 					bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);	// This one raises a base 16 number by 1
-					alertText = "RAVE LEVELS UP!";
+					alertText = "PARTY HARDER!";
 					break;
 				case 1:
 					ship.speed += 0.5;	// This one raises our movement speed a little
@@ -123,6 +127,7 @@ $(document).ready(function(){
 					alienBulletSpeed /= 5;	// You are Neo.
 					alienSpeed /= 5;
 					alienBulletInt *= 5;
+					starModifier /= 5;
 
 					aliens.forEach(function(alien) {
 						alien.speed /= 5;
@@ -132,6 +137,9 @@ $(document).ready(function(){
 					});
 					bullets.forEach(function(bullet) {
 						bullet.speed /= 5;
+					});
+					stars.forEach(function(star) {
+						star.speed /= 5;
 					});
 
 					slowMo = true;
@@ -230,6 +238,8 @@ $(document).ready(function(){
 
 	var alienBulletInt = 700;
 	var invincible     = false;
+
+	var starModifier = 1;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active = true;
@@ -353,9 +363,7 @@ $(document).ready(function(){
 		i.active = true;
 
 		i.x      = Math.random() * cWidth;	// Start somewhere at the top
-		i.width  = Math.random() * 4;
 		i.height = i.width;
-		i.speed  = 5 + (i.width * 5);	// Closer (bigger) stars move faster right?
 		i.colour = "#CCC";
 
 		i.draw   = function() {
@@ -373,8 +381,11 @@ $(document).ready(function(){
 	}
 
 	for (var x = 0; x < 40; x++) {	// We need to start with initial stars else it looks stupid
+		starWidth = Math.random() * 4;
 		stars.push(Star({
-			y: Math.random() * cHeight
+			y: Math.random() * cHeight,
+			width: starWidth,
+			speed: (5 + (starWidth * 5)) * starModifier
 		}));
 	}
 
@@ -634,8 +645,11 @@ $(document).ready(function(){
 			bullet.draw();
 		});
 
+		starWidth = Math.random() * 4;
 		stars.push(Star({	// Add a star every frame
-			y: 0
+			y: 0,
+			width: starWidth,
+			speed: (5 + (starWidth * 5)) * starModifier
 		}));
 
 		if (alienBulletThrottle === false) {	// Aliens shoot
