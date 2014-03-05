@@ -465,7 +465,7 @@ $(document).ready(function(){
 			alien.yDirection = "down";
 		});
 
-		alienGenerateThrottle = false;	// I removed this and it broke. IDK.
+		alienGenerateThrottle = true;	// I removed this and it broke. IDK.
 	}
 
 	bgMusic = document.getElementById('bg');
@@ -688,10 +688,11 @@ $(document).ready(function(){
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
 		alienBullets = [];
+		stars        = [];
 
 		bulletThrottle        = false;	// Reset
 		alienBulletThrottle   = false;	// Every
-		alienGenerateThrottle = false;	// Changed
+		pushAlienRow();               	// Changed
 		alienDirection        = "right";// Variable
 		alienY                = "";
 		score                 = 0;
@@ -711,6 +712,16 @@ $(document).ready(function(){
 		alertText             = "";
 		slowMo                = false;
 		invincible            = false;
+		starModifier          = 1;
+
+		for (var x = 0; x < 40; x++) {	// We need to start with initial stars else it looks stupid
+			starWidth = Math.random() * 4;
+			stars.push(Star({
+				y: Math.random() * cHeight,
+				width: starWidth,
+				speed: (5 + (starWidth * 5)) * starModifier
+			}));
+		}
 	}
 
 	var timeLeft = 3;
