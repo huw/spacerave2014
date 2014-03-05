@@ -223,7 +223,6 @@ $(document).ready(function(){
 
 	var bulletThrottle        = false;
 	var alienBulletThrottle   = false;
-	pushAlienRow();
 
 	var alienDirection = "right";
 	var alienY         = "";
@@ -236,17 +235,20 @@ $(document).ready(function(){
 
 	var bgAlpha = "1";
 
-	var bulletSpeed      = cHeight * 0.025;	// The speed is based on the height so users with tall screens have no advantage
-	var alienBulletSpeed = cHeight * 0.006;
+	var bulletSpeed      = Math.floor(cHeight * 0.025);	// The speed is based on the height so users with tall screens have no advantage
+	var alienBulletSpeed = Math.floor(cHeight * 0.006);
 	var alienSpeed       = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
-	var bulletWidth      = cWidth * 0.003;
-	var bulletHeight     = cWidth * 0.008;
-	var alienBulletWidth = cWidth * 0.004;
+	var bulletWidth      = Math.floor(cWidth * 0.003);
+	var bulletHeight     = Math.floor(cWidth * 0.008);
+	var alienBulletWidth = Math.floor(cWidth * 0.004);
 
 	var alienBulletInt = 700;
 	var invincible     = false;
 
 	var starModifier = 1;
+	var firstRow     = true;
+
+	pushAlienRow();
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active = true;
@@ -325,14 +327,14 @@ $(document).ready(function(){
 		}
 
 		i.direction = function() {	// Which way should we be going?
-			if (i.x < 0) {
-				alienDirection = "right";
-
-				aliens.forEach(function(alien) {	// This moves the bottom row outta the way
-					alien.x += alien.speed;			// so new aliens don't misalign
-				});
-
+			if (i.x <= 0) {
+				if (firstRow) {
+					aliens.forEach(function(alien){alien.x += Math.floor(cWidth / 960);})
+					firstRow = false;
+				}
 				pushAlienRow();
+
+				alienDirection = "right";
 			} else if (i.x > cWidth - i.width) {
 				alienDirection = "left";
 			}
@@ -679,6 +681,7 @@ $(document).ready(function(){
 	}
 
 	function resetGame() {
+		bgAlpha = "1";
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
 		ship.x     = cWidth / 2;	// We must rebuild him!
@@ -686,34 +689,33 @@ $(document).ready(function(){
 		ship.alpha = 1;
 		ship.state = "alive";	// Back from the dead!
 
+		bulletThrottle      = false;	// Reset
+		alienBulletThrottle = false;	// Every
+		pushAlienRow();               	// Changed
+		alienDirection      = "right";// Variable
+		alienY              = "";
+		score               = 0;
+		ship.speed          = cWidth * 0.006;
+		timeLeft            = 3;
+		textSize            = 80;
+		numberY             = cHeight / 2 + 90;
+		bulletSpeed         = Math.floor(cHeight * 0.025);
+		alienBulletSpeed    = Math.floor(cHeight * 0.006);
+		alienSpeed          = Math.floor(cWidth * 0.003);
+		bulletWidth         = Math.floor(cWidth * 0.003);
+		bulletHeight        = Math.floor(cWidth * 0.008);
+		alienBulletWidth    = Math.floor(cWidth * 0.004);
+		alienBulletInt      = 700;
+		option              = 0;
+		alertText           = "";
+		slowMo              = false;
+		invincible          = false;
+		starModifier        = 1;
+
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
 		alienBullets = [];
 		stars        = [];
-
-		bulletThrottle        = false;	// Reset
-		alienBulletThrottle   = false;	// Every
-		pushAlienRow();               	// Changed
-		alienDirection        = "right";// Variable
-		alienY                = "";
-		score                 = 0;
-		bgAlpha               = "1";
-		ship.speed            = cWidth * 0.006;
-		timeLeft              = 3;
-		textSize              = 80;
-		numberY               = cHeight / 2 + 90;
-		bulletSpeed           = cHeight * 0.025;	// The speed is based on the height so users with tall screens have no advantage
-		alienBulletSpeed      = cHeight * 0.006;
-		alienSpeed            = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
-		bulletWidth           = cWidth * 0.003;
-		bulletHeight          = cWidth * 0.008;
-		alienBulletWidth      = cWidth * 0.004;
-		alienBulletInt        = 700;
-		option                = 0;
-		alertText             = "";
-		slowMo                = false;
-		invincible            = false;
-		starModifier          = 1;
 
 		for (var x = 0; x < 40; x++) {	// We need to start with initial stars else it looks stupid
 			starWidth = Math.random() * 4;
