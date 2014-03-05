@@ -8,6 +8,13 @@ $(document).ready(function(){
 
 	var canvas = document.getElementById("canvas").getContext("2d");	// Pull our canvas
 
+	/****** LOADING SCREEN ******/
+	canvas.clearRect(0, 0, cWidth, cHeight);
+	canvas.font = "100px PressStart2P";
+	canvas.fillStyle = "#FFF";
+	canvas.textAlign = "center";
+	canvas.fillText("LOADING", cWidth / 2, cHeight / 2);
+
 	/****** INITIATE CANVAS ******/
 	var elapsed = 0;	// Amount of frames elapsed this game
 	var window_focus = true;
