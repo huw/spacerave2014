@@ -11,10 +11,21 @@ $(document).ready(function(){
 	/****** INITIATE CANVAS ******/
 	var elapsed = 0;	// Amount of frames elapsed this game
 	var window_focus = true;
-
+	var muteThrottle = false;
 	setInterval(function() {	// Draw and update every frame
 		$(window).focus(function(){window_focus = true; bgMusic.play()});	// Called when the window is in focus
 		$(window).blur(function(){window_focus = false; bgMusic.pause();});	// Called when the window isn't
+
+		if (keydown.m && !muteThrottle) {	// Mute music
+			if (!bgMusic.muted){
+				bgMusic.muted = true;
+			} else if (bgMusic.muted){
+				bgMusic.muted = false;
+			}
+
+			var muteThrottle = true;
+			setTimeout(function(){muteThrottle = false;}, 300);
+		}
 
 		if (window_focus && bgMusic.readyState == 4) {	// If the window is focused & the music is ready to play
 			if (elapsed > 60 * 3) {	// After the 3 second countdown
@@ -99,13 +110,12 @@ $(document).ready(function(){
 						bullet.width  += 1;
 						bullet.height += 1;
 					});
-					alienbBullets.forEach(function(bullet) {
+					alienBullets.forEach(function(bullet) {
 						bullet.width  += 1;
 						bullet.height += 1;
 					});
 
 					alertText = "BULLET ENHANCEMENTS!";
-
 					break;
 				case 4:
 					bulletSpeed /= 5;		// Slow. Everything. Down.
@@ -238,7 +248,7 @@ $(document).ready(function(){
 
 	function AlienBullet(i) {
 		i.active = true;
-		
+
 		i.speed  = alienBulletSpeed;	// Alien bullets are pretty much the same as normal ones
 		i.width  = alienBulletWidth;
 		i.height = i.width;
@@ -340,15 +350,15 @@ $(document).ready(function(){
 		i.height = i.width;
 		i.speed  = 5 + (i.width * 5);	// Closer (bigger) stars move faster right?
 		i.colour = "#CCC";
-		
+
 		i.draw   = function() {
 			canvas.fillStyle = this.colour;
 			canvas.fillRect(this.x, this.y, this.width, this.height);
 		}
-		
+
 		i.update = function() {
 			i.y += i.speed;
-		
+
 			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;
 		}
 
@@ -379,9 +389,11 @@ $(document).ready(function(){
 		});
 
 		aliens.forEach(function(alien) {	// If we smash into an alien
-			if (collides(ship, alien)) {
-				alien.state = "dying";	// Kill us both
-				ship.state = "dying";
+			if (alien.state == "alive") {	// Don't smash into dying aliens
+				if (collides(ship, alien)) {
+					alien.state = "dying";	// Kill us both
+					ship.state = "dying";
+				}
 			}
 		});
 
@@ -408,6 +420,9 @@ $(document).ready(function(){
 			if (object == ship) {	// This is us. We're dead.
 				firstTry = false;	// We're not green anymore
 				elapsed  = 0;		// Start from the beginning
+
+				bgMusic.pause()	// Reset music
+				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
 					createCookie("highscore", score + 1, "90");	// Improvements.
@@ -640,7 +655,7 @@ $(document).ready(function(){
 
 	function resetGame() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
-		
+
 		ship.x     = cWidth / 2;	// We must rebuild him!
 		ship.y     = cHeight - 60;
 		ship.alpha = 1;
@@ -656,8 +671,6 @@ $(document).ready(function(){
 		alienDirection        = "right";// Variable
 		alienY                = "";
 		score                 = 0;
-		bgMusic.pause()
-		bgMusic.currentTime   = 0;
 		bgAlpha               = "1";
 		ship.speed            = cWidth * 0.006;
 		timeLeft              = 3;
