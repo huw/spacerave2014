@@ -56,6 +56,7 @@ $(document).ready(function(){
 	var slowMo = false;
 	setInterval(function() {	// The Wheel of Spin!
 		if (window_focus && elapsed > 60 * 3) {
+			invincible = false;	// Reset invinciblility
 			if (slowMo === true) {
 				bulletSpeed *= 5;		// Reset the last one
 				alienBulletSpeed *= 5;
@@ -75,10 +76,10 @@ $(document).ready(function(){
 				slowMo = false;
 			}
 
-			option = Math.floor(Math.random() * 5);	// Choose a random number
+			option = Math.floor(Math.random() * 6);	// Choose a random number
 
 			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
-				option = Math.floor(Math.random() * 5);
+				option = Math.floor(Math.random() * 6);
 			}
 
 			switch(option) {	// Do something depending on the random number
@@ -136,6 +137,11 @@ $(document).ready(function(){
 					slowMo = true;
 
 					alertText = "SLOW MO!";
+					break;
+				case 5:
+					invincible = true;
+
+					alertText = "UNKILLABLE BY BULLETS! (5 SEC)"
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -223,6 +229,7 @@ $(document).ready(function(){
 	var alienBulletWidth = cWidth * 0.004;
 
 	var alienBulletInt = 700;
+	var invincible     = false;
 
 	function Bullet(i) {	// Bullet class constructor
 		i.active = true;
@@ -380,10 +387,7 @@ $(document).ready(function(){
 			aliens.forEach(function(alien) {
 				if (collides(bullet, alien)) {
 					bullet.active = false;	// Don't display the bullet
-
-					if (aliens.length > 1) {	// Prevent us from killing the last alien. This game is infinite.
-						alien.state = "dying";	// Don't display the alien
-					}
+					alien.state = "dying";	// Don't display the alien
 				}
 			});
 		});
@@ -397,11 +401,13 @@ $(document).ready(function(){
 			}
 		});
 
-		alienBullets.forEach(function(bullet) {	// If we are shot
-			if (collides(ship, bullet)) {
-				ship.state = "dying";
-			}
-		});
+		if (invincible === false) {
+			alienBullets.forEach(function(bullet) {	// If we are shot
+				if (collides(ship, bullet)) {
+					ship.state = "dying";
+				}
+			});
+		}
 
 		aliens.forEach(function(alien) {	// Kill us if the alien reaches the bottom
 			if (alien.y >= cHeight) {
@@ -562,6 +568,10 @@ $(document).ready(function(){
 			alienGenerateThrottle = true;
 		}
 
+		if (aliens.length == 0) {
+			alienGenerateThrottle = false;
+		}
+
 		aliens = aliens.filter(function(alien) {	// Cut star list down
 			return alien.active;
 		});
@@ -684,7 +694,9 @@ $(document).ready(function(){
 		alienBulletWidth      = cWidth * 0.004;
 		alienBulletInt        = 700;
 		option                = 0;
+		alertText             = "";
 		slowMo                = false;
+		invincible            = false;
 	}
 
 	var timeLeft = 3;
