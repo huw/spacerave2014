@@ -59,6 +59,8 @@ $(document).ready(function(){
 			muteThrottle = true;
 			setTimeout(function(){muteThrottle = false;}, 400);
 		}
+
+		console.log(aliens.length + ", " + bullets.length + ", " + stars.length + ", " + alienBullets.length);
 	}, 350);	// Called every beat
 
 	var alertStart;
@@ -334,14 +336,16 @@ $(document).ready(function(){
 		i.direction = function() {	// Which way should we be going?
 			if (i.x <= 0) {
 				if (firstRow) {
-					aliens.forEach(function(alien){alien.x += Math.floor(cWidth * 0.003) * 0.4;})
+					aliens.forEach(function(alien){alien.x += Math.floor(cWidth * 0.003) * 0.4;});
 					firstRow = false;
 				}
 				pushAlienRow();
 
 				alienDirection = "right";
+				aliens.forEach(function(alien){alien.x += alienSpeed;});
 			} else if (i.x > cWidth - i.width) {
 				alienDirection = "left";
+				aliens.forEach(function(alien){alien.x -= alienSpeed;});
 			}
 		}
 
