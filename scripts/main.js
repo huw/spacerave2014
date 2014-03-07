@@ -36,6 +36,18 @@ $(document).ready(function(){
 			}
 			elapsed++;	// Should be obvious
 		}
+
+		if (elapsed == 1) {
+			threeFX.play();
+		} else if (elapsed == 60) {
+			twoFX.play();
+			threeFX.pause();
+			threeFX.currentTime = 0;
+		} else if (elapsed == 120) {
+			oneFX.play();
+			twoFX.pause();
+			twoFX.currentTime = 0;
+		}
 	}, 1000/60);	// Divide 1 second by our FPS
 
 	var bgColour;
@@ -116,7 +128,7 @@ $(document).ready(function(){
 					alienSpeed += 0.3;	// Speed up new aliens and bullets
 					alienBulletInt += 100;
 
-					alertText = "ALIEN SPEED & BULLETS UP!"
+					alertText = "HARDER ALIENS!"
 					break;
 				case 3:
 					bulletSpeed      += 1;
@@ -134,7 +146,7 @@ $(document).ready(function(){
 						bullet.height += 1;
 					});
 
-					alertText = "BULLET ENHANCEMENTS!";
+					alertText = "BIGGER BULLETS!";
 					break;
 				case 4:
 					bulletSpeed /= 5;		// Slow. Everything. Down.
@@ -163,7 +175,7 @@ $(document).ready(function(){
 				case 5:
 					invincible = true;
 
-					alertText = "UNKILLABLE BY BULLETS! (5 SEC)"
+					alertText = "IMMUNE TO BULLETS (5 SEC)";
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -481,6 +493,12 @@ $(document).ready(function(){
 	}
 
 	bgMusic = document.getElementById('bg');
+	threeFX = document.getElementById('three');
+	threeFX.pause();
+	twoFX = document.getElementById('two');
+	twoFX.pause();
+	oneFX = document.getElementById('one');
+	oneFX.pause();
 	bgMusic.play();
 	bgMusic.loop = true;	// OOOH MUSIC!
 
@@ -720,6 +738,8 @@ $(document).ready(function(){
 		slowMo              = false;
 		invincible          = false;
 		starModifier        = 1;
+		oneFX.pause();
+		oneFX.currentTime   = 0;
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
