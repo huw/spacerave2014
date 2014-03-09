@@ -112,6 +112,14 @@ $(document).ready(function(){
 				option = Math.floor(Math.random() * 6);
 			}
 
+			while (option == 4 && elapsed < 4000) {
+				option = Math.floor(Math.random() * 6);
+			}
+
+			while (option == 1 && elapsed < 1000) {
+				option = Math.floor(Math.random() * 6);
+			}
+
 			switch(option) {	// Do something depending on the random number
 				case 0:
 					bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);	// This one raises a base 16 number by 1
@@ -426,7 +434,7 @@ $(document).ready(function(){
 	function testCollisions() {
 		bullets.forEach(function(bullet) {	// If we shoot alien
 			aliens.forEach(function(alien) {
-				if (collides(bullet, alien)) {
+				if (collides(bullet, alien) && alien.state == "alive") {
 					bullet.active = false;	// Don't display the bullet
 					alien.state = "dying";	// Don't display the alien
 				}
@@ -895,6 +903,6 @@ $(document).ready(function(){
 			}
 		}
 
-		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 290);	// Fill the tutorial text
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 220);	// Fill the tutorial text
 	}
 });
