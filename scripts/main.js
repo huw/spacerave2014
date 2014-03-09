@@ -789,9 +789,9 @@ $(document).ready(function(){
 			canvas.font = "40px PressStart2P";
 			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + 180);
 
-			canvas.font = "25px PressStart2P";
+			/*canvas.font = "25px PressStart2P";
 			canvas.fillStyle = "#55ACEE";
-			canvas.fillText("Press T to tweet your score!", cWidth / 2, cHeight / 2 + 220);
+			canvas.fillText("Press T to tweet your score!", cWidth / 2, cHeight / 2 + 220);*/
 
 			canvas.fillStyle = "#F00";
 
