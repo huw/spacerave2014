@@ -795,7 +795,7 @@ $(document).ready(function(){
 
 			canvas.fillStyle = "#F00";
 
-			if (keydown.t) {
+			/*if (keydown.t) {
 				var scoreDescription;
 
 				if (score < 10) {
@@ -822,7 +822,7 @@ $(document).ready(function(){
 
 				var twitterIntent = "https://twitter.com/intent/tweet?text=I%20got%20" + scoreDescription + "%20score%20of%20" + score + "%20in%20%23spacerave2014%20@&url=https%3A%2F%2Fhuw.github.io";
 				window.open(twitterIntent, "Tweet your score");
-			}
+			}*/
 		}
 
 		canvas.font = "25px PressStart2P";	// Highscores here
