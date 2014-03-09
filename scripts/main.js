@@ -35,18 +35,18 @@ $(document).ready(function(){
 				beginRave();	// Display the countdown if we're not playing or resetting
 			}
 			elapsed++;	// Should be obvious
-		}
 
-		if (elapsed == 1) {
-			threeFX.play();
-		} else if (elapsed == 60) {
-			twoFX.play();
-			threeFX.pause();
-			threeFX.currentTime = 0;
-		} else if (elapsed == 120) {
-			oneFX.play();
-			twoFX.pause();
-			twoFX.currentTime = 0;
+			if (elapsed == 1) {
+				threeFX.play();
+			} else if (elapsed == 60) {
+				twoFX.play();
+				threeFX.pause();
+				threeFX.currentTime = 0;
+			} else if (elapsed == 120) {
+				oneFX.play();
+				twoFX.pause();
+				twoFX.currentTime = 0;
+			}
 		}
 	}, 1000/60);	// Divide 1 second by our FPS
 
