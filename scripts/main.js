@@ -364,13 +364,8 @@ $(document).ready(function(){
 
 		i.direction = function() {	// Which way should we be going?
 			if (i.x <= 0) {
-				if (firstRow) {
-					aliens.forEach(function(alien){alien.x += Math.floor(cWidth * 0.003) * 0.4;});
-					firstRow = false;
-				}
-				pushAlienRow();
-
 				alienDirection = "right";
+				pushAlienRow();
 				aliens.forEach(function(alien){alien.x += alienSpeed;});
 			} else if (i.x > cWidth - i.width) {
 				alienDirection = "left";
