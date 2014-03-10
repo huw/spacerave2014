@@ -37,15 +37,14 @@ $(document).ready(function(){
 			elapsed++;	// Should be obvious
 
 			if (elapsed == 1) {
+				threeFX.currentTime = 0;
 				threeFX.play();
 			} else if (elapsed == 60) {
-				twoFX.play();
-				threeFX.pause();
-				threeFX.currentTime = 0;
-			} else if (elapsed == 120) {
-				oneFX.play();
-				twoFX.pause();
 				twoFX.currentTime = 0;
+				twoFX.play();
+			} else if (elapsed == 120) {
+				oneFX.currentTime = 0;
+				oneFX.play();
 			}
 		}
 	}, 1000/60);	// Divide 1 second by our FPS
@@ -60,10 +59,16 @@ $(document).ready(function(){
 		if (keydown.m && !muteThrottle) {	// Mute music
 			if (bgMusic.muted){
 				bgMusic.muted = false;
+				oneFX.muted = false;
+				twoFX.muted = false;
+				threeFX.muted = false;
 
 				createCookie("muted", false, 2);
 			} else {
 				bgMusic.muted = true;
+				oneFX.muted = true;
+				twoFX.muted = true;
+				threeFX.muted = true;
 
 				createCookie("muted", false, 2);
 			}
@@ -746,8 +751,6 @@ $(document).ready(function(){
 		slowMo              = false;
 		invincible          = false;
 		starModifier        = 1;
-		oneFX.pause();
-		oneFX.currentTime   = 0;
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
