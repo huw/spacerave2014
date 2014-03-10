@@ -109,18 +109,34 @@ $(document).ready(function(){
 				slowMo = false;
 			}
 
-			option = Math.floor(Math.random() * 7);	// Choose a random number
+			chooseNumber() {
+				option = Math.floor(Math.random() * 9);	// Choose a random number
+			}
+
+			chooseNumber();
 
 			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
-				option = Math.floor(Math.random() * 7);
+				chooseNumber();
 			}
 
 			while (option == 4 && elapsed < 4000) {
-				option = Math.floor(Math.random() * 7);
+				chooseNumber();
 			}
 
 			while (option == 1 && elapsed < 1000) {
-				option = Math.floor(Math.random() * 7);
+				chooseNumber();
+			}
+
+			while (option == 6 && bulletType == "single") {
+				chooseNumber();
+			}
+
+			while (option == 7 && bulletType == "double") {
+				chooseNumber();
+			}
+
+			while (option == 8 && bulletType == "triple") {
+				chooseNumber();
 			}
 
 			switch(option) {	// Do something depending on the random number
@@ -189,9 +205,22 @@ $(document).ready(function(){
 					alertText = "IMMUNE TO BULLETS (5 SEC)";
 					break;
 				case 6:
-					bulletNumber += 1;
+					bulletType   = "single";
+					bulletNumber = 0;
 
-					alertText = "MORE GUN!";
+					alertText = "SINGLE BULLETS!";
+					break;
+				case 7:
+					bulletType   = "double";
+					bulletNumber = 1;
+
+					alertText = "DOUBLE BULLETS!";
+					break;
+				case 8:
+					bulletType   = "double";
+					bulletNumber = 2;
+
+					alertText = "TRIPLE BULLETS!";
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -280,6 +309,7 @@ $(document).ready(function(){
 
 	var alienBulletInt = 700;
 	var invincible     = false;
+	var bulletType     = "single";
 
 	var starModifier = 1;
 	var firstRow     = true;
@@ -301,6 +331,7 @@ $(document).ready(function(){
 
 		i.update = function() {
 			i.y -= i.speed;
+			i.x += i.xSpeed;
 
 			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;	// Only declare as active if its inside screen
 		}
@@ -383,6 +414,7 @@ $(document).ready(function(){
 		width : cWidth * 0.025,	// You know the drill with relative sizing
 		height: cWidth * 0.025,
 		speed : cWidth * 0.006,
+		xSpeed: 0,
 		alpha : 1,
 		state : "alive",
 		draw  : function() {
@@ -394,11 +426,24 @@ $(document).ready(function(){
 			canvas.globalAlpha = 1;
 		},
 		shoot : function() {	// Shoots bullets!
-			for (var i = 0; i <= bulletNumber; i++) {
-				bullets.push(Bullet({
-					x: i * 8 + (this.x + this.width / 2)- (bulletNumber * 0.5) * 8,	// Fire bullets from slightly random spots
-					y: this.y
-				}));
+			switch(bulletType) {
+				case "single":
+					bullets.push(Bullet({
+						x: this.x + this.width / 2,
+						// The line above centers bullets by adding spacing then subtracting the # of bullets
+						y: this.y,
+						xSpeed: 0
+					}));
+					break;
+				case "double":
+					for (var i = 0; i <= bulletNumber; i++) {	// Space bullets properly
+						bullets.push(Bullet({
+							x: i * 8 + (this.x + this.width / 2) - (bulletNumber * 4),
+							// The line above centers bullets by adding spacing then subtracting the # of bullets
+							y: this.y,
+							xSpeed: (i * 5) - (bulletNumber * 2.5)
+						}));
+					}
 			}
 		}
 	}
@@ -753,6 +798,7 @@ $(document).ready(function(){
 		invincible          = false;
 		starModifier        = 1;
 		bulletNumber        = 0;
+		bulletType          = "single";
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
