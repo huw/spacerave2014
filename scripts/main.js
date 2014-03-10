@@ -109,18 +109,18 @@ $(document).ready(function(){
 				slowMo = false;
 			}
 
-			option = Math.floor(Math.random() * 6);	// Choose a random number
+			option = Math.floor(Math.random() * 7);	// Choose a random number
 
 			while (option == 0 && bgAlpha == "f") {	// Sometimes this option isn't a good idea
-				option = Math.floor(Math.random() * 6);
+				option = Math.floor(Math.random() * 7);
 			}
 
 			while (option == 4 && elapsed < 4000) {
-				option = Math.floor(Math.random() * 6);
+				option = Math.floor(Math.random() * 7);
 			}
 
 			while (option == 1 && elapsed < 1000) {
-				option = Math.floor(Math.random() * 6);
+				option = Math.floor(Math.random() * 7);
 			}
 
 			switch(option) {	// Do something depending on the random number
@@ -187,6 +187,11 @@ $(document).ready(function(){
 					invincible = true;
 
 					alertText = "IMMUNE TO BULLETS (5 SEC)";
+					break;
+				case 6:
+					bulletNumber += 1;
+
+					alertText = "MORE GUN!";
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -257,6 +262,7 @@ $(document).ready(function(){
 	var alienDirection = "right";
 	var alienY         = "";
 	var score          = 0;
+	var bulletNumber   = 0;
 
 	var arrowsUsed = false;	// These change when we use the input
 	var wasdUsed   = false;
@@ -393,10 +399,12 @@ $(document).ready(function(){
 			canvas.globalAlpha = 1;
 		},
 		shoot : function() {	// Shoots bullets!
-			bullets.push(Bullet({
-				x: (this.x + this.width / 2) - Math.random() * 4,	// Fire bullets from slightly random spots
-				y: this.y
-			}));
+			for (var i = 0; i <= bulletNumber; i++) {
+				bullets.push(Bullet({
+					x: i * 8 + (this.x + this.width / 2)- (bulletNumber * 0.5) * 8,	// Fire bullets from slightly random spots
+					y: this.y
+				}));
+			}
 		}
 	}
 
