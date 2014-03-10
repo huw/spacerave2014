@@ -145,12 +145,25 @@ $(document).ready(function(){
 					alertText = "PARTY HARDER!";
 					break;
 				case 1:
-					ship.speed += 0.5;	// This one raises our movement speed a little
+					ship.speed += 0.5;
+					aliens.forEach(function(alien) {
+						alien.speed += 0.5;
+					});
+					alienSpeed += 0.5;
+					bulletSpeed += 0.5;
+					alienBulletSpeed += 0.5;
+					bullets.forEach(function(bullet) {
+						bullet.speed += 0.5;
+					});
+					alienBullets.forEach(function(bullet) {
+						bullet.speed += 0.5;
+					});
+
 					alertText = "SPEED UP!";
 					break;
 				case 2:
 					aliens.forEach(function(alien) {	// This one speeds up aliens
-						alien.speed += 0.3;
+						alien.speed += 0.5;
 					});
 					alienSpeed += 0.5;	// Speed up new aliens and bullets
 					alienBulletInt += 100;
@@ -302,7 +315,7 @@ $(document).ready(function(){
 
 	var bulletSpeed      = Math.floor(cHeight * 0.025);	// The speed is based on the height so users with tall screens have no advantage
 	var alienBulletSpeed = Math.floor(cHeight * 0.006);
-	var alienSpeed       = Math.floor(cWidth * 0.005);	// If we don't round, they misalign
+	var alienSpeed       = Math.floor(cWidth * 0.0037);	// If we don't round, they misalign
 	var bulletWidth      = Math.floor(cWidth * 0.003);
 	var bulletHeight     = Math.floor(cWidth * 0.008);
 	var alienBulletWidth = Math.floor(cWidth * 0.004);
@@ -787,7 +800,7 @@ $(document).ready(function(){
 		numberY             = cHeight / 2 + 90;
 		bulletSpeed         = Math.floor(cHeight * 0.025);
 		alienBulletSpeed    = Math.floor(cHeight * 0.006);
-		alienSpeed          = Math.floor(cWidth * 0.003);
+		alienSpeed          = Math.floor(cWidth * 0.0037);
 		bulletWidth         = Math.floor(cWidth * 0.003);
 		bulletHeight        = Math.floor(cWidth * 0.008);
 		alienBulletWidth    = Math.floor(cWidth * 0.004);
