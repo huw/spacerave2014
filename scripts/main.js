@@ -752,6 +752,7 @@ $(document).ready(function(){
 		slowMo              = false;
 		invincible          = false;
 		starModifier        = 1;
+		bulletNumber        = 0;
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
