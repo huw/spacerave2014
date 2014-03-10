@@ -23,7 +23,7 @@ $(document).ready(function(){
 		$(window).focus(function(){window_focus = true; bgMusic.play()});	// Called when the window is in focus
 		$(window).blur(function(){window_focus = false; bgMusic.pause();});	// Called when the window isn't
 
-		if (window_focus && bgMusic.readyState == 4) {	// If the window is focused & the music is ready to play
+		if (window_focus) {	// If the window is focused & the music is ready to play
 			if (elapsed > 60 * 3) {	// After the 3 second countdown
 				update();	// The big two. These do (almost) everything.
 				draw();
