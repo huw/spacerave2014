@@ -109,7 +109,7 @@ $(document).ready(function(){
 				slowMo = false;
 			}
 
-			chooseNumber() {
+			var chooseNumber = function() {
 				option = Math.floor(Math.random() * 9);	// Choose a random number
 			}
 
@@ -152,7 +152,7 @@ $(document).ready(function(){
 					aliens.forEach(function(alien) {	// This one speeds up aliens
 						alien.speed += 0.3;
 					});
-					alienSpeed += 0.3;	// Speed up new aliens and bullets
+					alienSpeed += 0.5;	// Speed up new aliens and bullets
 					alienBulletInt += 100;
 
 					alertText = "HARDER ALIENS!"
@@ -302,7 +302,7 @@ $(document).ready(function(){
 
 	var bulletSpeed      = Math.floor(cHeight * 0.025);	// The speed is based on the height so users with tall screens have no advantage
 	var alienBulletSpeed = Math.floor(cHeight * 0.006);
-	var alienSpeed       = Math.floor(cWidth * 0.003);	// If we don't round, they misalign
+	var alienSpeed       = Math.floor(cWidth * 0.005);	// If we don't round, they misalign
 	var bulletWidth      = Math.floor(cWidth * 0.003);
 	var bulletHeight     = Math.floor(cWidth * 0.008);
 	var alienBulletWidth = Math.floor(cWidth * 0.004);
