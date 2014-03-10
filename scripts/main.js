@@ -76,8 +76,6 @@ $(document).ready(function(){
 			muteThrottle = true;
 			setTimeout(function(){muteThrottle = false;}, 400);
 		}
-
-		console.log(aliens.length + ", " + bullets.length + ", " + stars.length + ", " + alienBullets.length);
 	}, 350);	// Called every beat
 
 	var alertStart;
