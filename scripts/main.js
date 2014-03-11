@@ -92,6 +92,7 @@ $(document).ready(function(){
 				alienSpeed *= 5;
 				alienBulletInt /= 5;	// Inverted because we divide by this
 				starModifier *= 5;
+				xSpeedMod = 1;
 
 				aliens.forEach(function(alien) {
 					alien.speed *= 5;
@@ -194,6 +195,7 @@ $(document).ready(function(){
 					alienSpeed /= 5;
 					alienBulletInt *= 5;
 					starModifier /= 5;
+					xSpeedMod = 5;
 
 					aliens.forEach(function(alien) {
 						alien.speed /= 5;
@@ -319,6 +321,7 @@ $(document).ready(function(){
 	var bulletWidth      = Math.floor(cWidth * 0.003);
 	var bulletHeight     = Math.floor(cWidth * 0.008);
 	var alienBulletWidth = Math.floor(cWidth * 0.004);
+	var xSpeedMod        = 1;
 
 	var alienBulletInt = 700;
 	var invincible     = false;
@@ -427,7 +430,6 @@ $(document).ready(function(){
 		width : cWidth * 0.025,	// You know the drill with relative sizing
 		height: cWidth * 0.025,
 		speed : cWidth * 0.006,
-		xSpeed: 0,
 		alpha : 1,
 		state : "alive",
 		draw  : function() {
@@ -454,9 +456,10 @@ $(document).ready(function(){
 							x: i * 8 + (this.x + this.width / 2) - (bulletNumber * 4),
 							// The line above centers bullets by adding spacing then subtracting the # of bullets
 							y: this.y,
-							xSpeed: (i * 5) - (bulletNumber * 2.5)
+							xSpeed: ((i * 5) - (bulletNumber * 2.5)) / xSpeedMod
 						}));
 					}
+					break;
 			}
 		}
 	}
