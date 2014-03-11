@@ -111,7 +111,7 @@ $(document).ready(function(){
 			}
 
 			var chooseNumber = function() {
-				option = Math.floor(Math.random() * 9);	// Choose a random number
+				option = Math.floor(Math.random() * 10);	// Choose a random number
 			}
 
 			chooseNumber();
@@ -220,22 +220,31 @@ $(document).ready(function(){
 					alertText = "IMMUNE TO BULLETS (5 SEC)";
 					break;
 				case 6:
-					bulletType   = "single";
-					bulletNumber = 0;
+					bulletType    = "single";
+					bulletNumber  = 0;
+					bulletTimeout = 350;
 
 					alertText = "SINGLE BULLETS!";
 					break;
 				case 7:
-					bulletType   = "double";
-					bulletNumber = 1;
+					bulletType    = "double";
+					bulletNumber  = 1;
+					bulletTimeout = 350;
 
 					alertText = "DOUBLE BULLETS!";
 					break;
 				case 8:
-					bulletType   = "double";
-					bulletNumber = 2;
+					bulletType    = "double";
+					bulletNumber  = 2;
+					bulletTimeout = 350;
 
 					alertText = "TRIPLE BULLETS!";
+					break;
+				case 9:
+					bulletType    = "laser";
+					bulletTimeout = 700;
+
+					alertText = "LASERS ENABLED!";
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
@@ -322,6 +331,7 @@ $(document).ready(function(){
 	var bulletHeight     = Math.floor(cWidth * 0.008);
 	var alienBulletWidth = Math.floor(cWidth * 0.004);
 	var xSpeedMod        = 1;
+	var bulletTimeout    = 350;
 
 	var alienBulletInt = 700;
 	var invincible     = false;
@@ -350,6 +360,35 @@ $(document).ready(function(){
 			i.x += i.xSpeed;
 
 			i.active = i.active && i.x >= 0 && i.x <= cWidth && i.y >= 0 && i.y <= cHeight;	// Only declare as active if its inside screen
+		}
+
+		return i;
+	}
+
+	function Laser(i) {
+		i.active = true;
+
+		i.width  = bulletWidth * 3;
+		i.height = cHeight;
+		i.colour = "#F60";
+		i.start  = elapsed;
+		i.alpha  = 1;
+
+		i.draw = function() {
+			canvas.fillStyle = this.colour;
+			canvas.globalAlpha = this.alpha;
+			canvas.fillRect(this.x, this.y, this.width, this.height);
+			canvas.globalAlpha = 1;
+		}
+
+		i.update = function() {
+			if (this.start > elapsed - 20) {
+				this.alpha -= 0.1;
+
+				if (this.alpha < 0.1) {
+					this.active = false;
+				}
+			}
 		}
 
 		return i;
@@ -459,6 +498,12 @@ $(document).ready(function(){
 							xSpeed: ((i * 5) - (bulletNumber * 2.5)) / xSpeedMod
 						}));
 					}
+					break;
+				case "laser":
+					bullets.push(Laser({
+						x: this.x + this.width / 2,
+						y: this.y - cHeight
+					}));
 					break;
 			}
 		}
@@ -624,7 +669,7 @@ $(document).ready(function(){
 				if (bulletThrottle === false) {	// If we haven't shot recently
 					ship.shoot();
 					bulletThrottle = true;
-					setTimeout(function(){bulletThrottle = false;}, 350);	// Shoot on the beat
+					setTimeout(function(){bulletThrottle = false;}, bulletTimeout);	// Shoot on the beat
 				}
 			}
 
@@ -634,7 +679,7 @@ $(document).ready(function(){
 			    if (bulletThrottle === false) {
 			    	ship.shoot();
 			    	bulletThrottle = true;
-			    	setTimeout(function(){bulletThrottle = false;}, 350);
+			    	setTimeout(function(){bulletThrottle = false;}, bulletTimeout);
 			    }
 			});
 		}
@@ -815,6 +860,7 @@ $(document).ready(function(){
 		starModifier        = 1;
 		bulletNumber        = 0;
 		bulletType          = "single";
+		bulletTimeout       = 350;
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
