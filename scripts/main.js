@@ -414,11 +414,14 @@ $(document).ready(function(){
 			canvas.globalAlpha = this.alpha;	// Helps with fade out effect
 			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
 			canvas.globalAlpha = 1;	// Reset this so we don't draw everything else transparent
+
+			canvas.font = "20px PressStart2P";
+			canvas.fillStyle = "#FFF";
+			canvas.textAlign = "center";
+			canvas.fillText(this.x, this.x + this.width / 2, this.y);
 		}
 
 		i.update = function() {
-			this.x = Math.floor(this.x);	// Round position
-
 			if (i.yDirection == "down") {	// This is a little hacky.
 				i.y += i.speed;
 
@@ -437,13 +440,12 @@ $(document).ready(function(){
 		}
 
 		i.direction = function() {	// Which way should we be going?
-			if (i.x <= 0) {
+			if (i.x <= 1 && alienDirection == "left") {
 				alienDirection = "right";
 				pushAlienRow();
-				aliens.forEach(function(alien){alien.x += alienSpeed;});
-			} else if (i.x > cWidth - i.width) {
+			} else if (i.x > cWidth - i.width && alienDirection == "right") {
 				alienDirection = "left";
-				aliens.forEach(function(alien){alien.x -= alienSpeed;});
+				aliens.forEach(function(alien){alien.x -= 1;});
 			}
 		}
 
@@ -597,6 +599,7 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {
 			alien.originalY = alien.y;	// Move everyone down a little
 			alien.yDirection = "down";
+			alien.x += 1;
 		});
 	}
 
