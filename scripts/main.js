@@ -417,6 +417,8 @@ $(document).ready(function(){
 		}
 
 		i.update = function() {
+			this.x = Math.floor(this.x);	// Round position
+
 			if (i.yDirection == "down") {	// This is a little hacky.
 				i.y += i.speed;
 
@@ -430,6 +432,8 @@ $(document).ready(function(){
 			} else if (alienDirection == "right") {
 				i.x += i.speed;
 			}
+
+			this.x = Math.floor(this.x);	// Do it again
 		}
 
 		i.direction = function() {	// Which way should we be going?
@@ -700,16 +704,16 @@ $(document).ready(function(){
 			return bullet.active;
 		});
 
+		aliens.forEach(function(alien) {
+			alien.direction();
+		});
+
 		aliens.forEach(function(alien) {	// For each alien
 			alien.update();
 
 			if (alien.state == "dying") {
 				killObject(alien);
 			}
-		});
-
-		aliens.forEach(function(alien) {
-			alien.direction();
 		});
 
 		aliens = aliens.filter(function(alien) {	// Cut aliens
