@@ -86,6 +86,9 @@ $(document).ready(function(){
 	setInterval(function() {	// The Wheel of Spin!
 		if (window_focus && elapsed > 60 * 3) {
 			invincible = false;	// Reset invinciblility
+			bulletType    = "single";	// Reset bullets
+			bulletNumber  = 0;
+			bulletTimeout = 350;
 			if (slowMo === true) {
 				bulletSpeed *= 5;		// Reset the last one
 				alienBulletSpeed *= 5;
@@ -111,7 +114,7 @@ $(document).ready(function(){
 			}
 
 			var chooseNumber = function() {
-				option = Math.floor(Math.random() * 10);	// Choose a random number
+				option = Math.floor(Math.random() * 9);	// Choose a random number
 			}
 
 			chooseNumber();
@@ -125,18 +128,6 @@ $(document).ready(function(){
 			}
 
 			while (option == 1 && elapsed < 1000) {
-				chooseNumber();
-			}
-
-			while (option == 6 && bulletType == "single") {
-				chooseNumber();
-			}
-
-			while (option == 7 && bulletType == "double") {
-				chooseNumber();
-			}
-
-			while (option == 8 && bulletType == "triple") {
 				chooseNumber();
 			}
 
@@ -220,31 +211,24 @@ $(document).ready(function(){
 					alertText = "IMMUNE TO BULLETS (5 SEC)";
 					break;
 				case 6:
-					bulletType    = "single";
-					bulletNumber  = 0;
-					bulletTimeout = 350;
-
-					alertText = "SINGLE BULLETS!";
-					break;
-				case 7:
 					bulletType    = "double";
 					bulletNumber  = 1;
 					bulletTimeout = 350;
 
 					alertText = "DOUBLE BULLETS!";
 					break;
-				case 8:
+				case 7:
 					bulletType    = "double";
 					bulletNumber  = 2;
 					bulletTimeout = 350;
 
 					alertText = "TRIPLE BULLETS!";
 					break;
-				case 9:
+				case 8:
 					bulletType    = "laser";
 					bulletTimeout = 700;
 
-					alertText = "LASERS ENABLED!";
+					alertText = "IMMA FIRIN MAH LASER!";
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
