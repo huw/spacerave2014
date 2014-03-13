@@ -414,11 +414,6 @@ $(document).ready(function(){
 			canvas.globalAlpha = this.alpha;	// Helps with fade out effect
 			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
 			canvas.globalAlpha = 1;	// Reset this so we don't draw everything else transparent
-
-			canvas.font = "20px PressStart2P";
-			canvas.fillStyle = "#FFF";
-			canvas.textAlign = "center";
-			canvas.fillText(this.x, this.x + this.width / 2, this.y);
 		}
 
 		i.update = function() {
