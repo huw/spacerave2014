@@ -18,3 +18,8 @@ canvas {	/* Not sure how well this works. Should center it */
 img, audio {	/* Hide these because they get pulled into the game */
   display: none;
 }
+
+iframe {
+	width: 0px;
+	height: 0px;
+}
