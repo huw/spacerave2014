@@ -238,7 +238,7 @@ $(document).ready(function(){
 			alertAlpha = 0.1;	// Reset our alert
 			alertStart = elapsed;
 		}
-	}, 5600);
+	}, 5580);
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
 	/* 	I kinda copied this bit from a canvas tutorial.
@@ -811,6 +811,9 @@ $(document).ready(function(){
 		canvas.fillStyle = "rgba(255, 255, 255, " + alertAlpha + ")";
 		canvas.textAlign = "center";
 		canvas.fillText(alertText, cWidth / 2, 55);
+
+		canvas.fillStyle = "#F0F";
+		canvas.fillRect(0, 0, cWidth * (((elapsed + 330) % 330) / 330), 5);
 	}
 
 	function resetGame() {
