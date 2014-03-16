@@ -83,8 +83,8 @@ $(document).ready(function(){
 	var option;
 	var alertText = "";
 	var slowMo = false;
-	setInterval(function() {	// The Wheel of Spin!
-		if (window_focus && elapsed > 60 * 3) {
+	function wheelOfSpin() {
+		if (window_focus && elapsed > 60 * 3 && elapsed % 330 == 0) {
 			invincible = false;	// Reset invinciblility
 			bulletType    = "single";	// Reset bullets
 			bulletNumber  = 0;
@@ -238,7 +238,7 @@ $(document).ready(function(){
 			alertAlpha = 0.1;	// Reset our alert
 			alertStart = elapsed;
 		}
-	}, 5580);
+	}
 
 	/****** JQUERY-KEYDOWN-DETECTOR-O-MATIC-2000 ******/
 	/* 	I kinda copied this bit from a canvas tutorial.
@@ -630,6 +630,8 @@ $(document).ready(function(){
 
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
+		wheelOfSpin();
+
 		if (ship.state == "alive") {	// You can't move when you're dead
 			if (keydown.left || keydown.a) {	// Detect movement keys, move appropriately
 				ship.x -= ship.speed;
