@@ -405,15 +405,16 @@ $(document).ready(function(){
 
 		i.width  = cWidth * 0.025;	// A lot of the game revolves around them
 		i.height = i.width;			// being equal between screens
-		i.colour = "#F00";
 		i.alpha  = 1;
 		i.speed  = alienSpeed;
 		i.state  = "alive";	// This is a determinator for animations
 
 		i.draw = function() {
-			canvas.globalAlpha = this.alpha;	// Helps with fade out effect
-			canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
-			canvas.globalAlpha = 1;	// Reset this so we don't draw everything else transparent
+			if (this.active) {
+				canvas.globalAlpha = this.alpha;	// Helps with fade out effect
+				canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
+				canvas.globalAlpha = 1;	// Reset this so we don't draw everything else transparent
+			}
 		}
 
 		i.update = function() {
@@ -556,7 +557,7 @@ $(document).ready(function(){
 		}
 
 		aliens.forEach(function(alien) {	// Kill us if the alien reaches the bottom
-			if (alien.y >= cHeight) {
+			if (alien.y + alien.height - 1 >= cHeight && alien.active) {
 				ship.state = "dying";
 			}
 		});
@@ -714,10 +715,6 @@ $(document).ready(function(){
 			if (alien.state == "dying") {
 				killObject(alien);
 			}
-		});
-
-		aliens = aliens.filter(function(alien) {	// Cut aliens
-			return alien.active;
 		});
 
 		if (aliens.length == 0) {
