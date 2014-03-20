@@ -431,8 +431,6 @@ $(document).ready(function(){
 			} else if (alienDirection == "right") {
 				i.x += i.speed;
 			}
-
-			this.x = Math.floor(this.x);	// Do it again
 		}
 
 		i.direction = function() {	// Which way should we be going?
@@ -441,7 +439,6 @@ $(document).ready(function(){
 				pushAlienRow();
 			} else if (i.x > cWidth - i.width && alienDirection == "right") {
 				alienDirection = "left";
-				aliens.forEach(function(alien){alien.x -= 1;});
 			}
 		}
 
@@ -595,7 +592,6 @@ $(document).ready(function(){
 		aliens.forEach(function(alien) {
 			alien.originalY = alien.y;	// Move everyone down a little
 			alien.yDirection = "down";
-			alien.x += 1;
 		});
 	}
 
@@ -709,6 +705,11 @@ $(document).ready(function(){
 			alien.direction();
 		});
 
+		if (aliens.length == 0) {
+			pushAlienRow();
+			alienDirection = "right";
+		}
+
 		aliens.forEach(function(alien) {	// For each alien
 			alien.update();
 
@@ -717,10 +718,11 @@ $(document).ready(function(){
 			}
 		});
 
-		if (aliens.length == 0) {
-			pushAlienRow();
-			alienDirection = "right";
-		}
+		for (var x = 0; x < 10; x++) {	// Legitimately fixes the alignment bug
+			for (var y = 0; y < Math.floor(aliens.length / 10); y++) {
+				aliens[(y * 10) + x].x = aliens[x].x;	// I don't know how I thought of this
+			}
+		}	// This is a truly great moment in human history
 
 		stars.forEach(function(star) {
 			star.update();
