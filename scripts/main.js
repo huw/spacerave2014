@@ -794,6 +794,10 @@ $(document).ready(function(){
 			if (aliens[0]) {
 				var randomAlien = Math.floor(Math.random() * aliens.length);	// Random alien shoots
 
+				while (!aliens[randomAlien].active) {	// If the alien is dead don't shoot
+					randomAlien = Math.floor(Math.random() * aliens.length);
+				}
+
 				alienBullets.push(AlienBullet({
 					x: aliens[randomAlien].x,
 					y: aliens[randomAlien].y
