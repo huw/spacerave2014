@@ -20,8 +20,15 @@ $(document).ready(function(){
 	var window_focus = true;
 	var muteThrottle = false;
 	setInterval(function() {	// Draw and update every frame
-		$(window).focus(function(){window_focus = true; bgMusic.play()});	// Called when the window is in focus
-		$(window).blur(function(){window_focus = false; bgMusic.pause();});	// Called when the window isn't
+		$(window).focus(function(){
+			window_focus = true;
+			if (gameMode == "normal") {
+				bgMusic.play();
+			} else {
+				allStar.play();
+			}
+		});	// Called when the window is in focus
+		$(window).blur(function(){window_focus = false; bgMusic.pause(); allStar.pause();});	// Called when the window isn't
 
 		if (window_focus) {	// If the window is focused & the music is ready to play
 			if (elapsed > 60 * 3) {	// After the 3 second countdown
@@ -55,27 +62,6 @@ $(document).ready(function(){
 		if (window_focus) {
 			bgColour = randomColour(bgAlpha, bgColour, bgAlpha + "00", "F0F");	// Change the background colour
 		}
-
-		if (keydown.m && !muteThrottle) {	// Mute music
-			if (bgMusic.muted){
-				bgMusic.muted = false;
-				oneFX.muted = false;
-				twoFX.muted = false;
-				threeFX.muted = false;
-
-				createCookie("muted", false, 2);
-			} else {
-				bgMusic.muted = true;
-				oneFX.muted = true;
-				twoFX.muted = true;
-				threeFX.muted = true;
-
-				createCookie("muted", false, 2);
-			}
-
-			muteThrottle = true;
-			setTimeout(function(){muteThrottle = false;}, 400);
-		}
 	}, 350);	// Called every beat
 
 	var alertStart;
@@ -89,6 +75,7 @@ $(document).ready(function(){
 			bulletType    = "single";	// Reset bullets
 			bulletNumber  = 0;
 			bulletTimeout = 350;
+			gameMode = "normal";
 			if (slowMo === true) {
 				bulletSpeed *= 5;		// Reset the last one
 				alienBulletSpeed *= 5;
@@ -114,7 +101,7 @@ $(document).ready(function(){
 			}
 
 			var chooseNumber = function() {
-				option = Math.floor(Math.random() * 9);	// Choose a random number
+				option = Math.floor(Math.random() * 10);	// Choose a random number
 			}
 
 			chooseNumber();
@@ -230,6 +217,12 @@ $(document).ready(function(){
 
 					alertText = "IMMA FIRIN MAH LASER!";
 					break;
+				case 9:
+					gameMode = "shrek";
+					bgMusic.pause();
+
+					alertText = "SPACE SWAMP INCOMING!";
+					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
 					break;
@@ -320,6 +313,7 @@ $(document).ready(function(){
 	var alienBulletInt = 700;
 	var invincible     = false;
 	var bulletType     = "single";
+	var gameMode       = "normal";
 
 	var starModifier = 1;
 	var firstRow     = true;
@@ -411,8 +405,15 @@ $(document).ready(function(){
 
 		i.draw = function() {
 			if (this.active) {
+				var alienImage;
+				if (gameMode == "normal") {
+					alienImage = document.getElementById("alien");
+				} else {
+					alienImage = document.getElementById("farquaad");
+				}
+
 				canvas.globalAlpha = this.alpha;	// Helps with fade out effect
-				canvas.drawImage(document.getElementById("alien"), this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
+				canvas.drawImage(alienImage, this.x, this.y, this.width, this.height);	// We're pulling the alien's sprite from raw html
 				canvas.globalAlpha = 1;	// Reset this so we don't draw everything else transparent
 			}
 		}
@@ -458,8 +459,15 @@ $(document).ready(function(){
 			this.x += Math.random() - 0.5;	// Jitter it a little
 			this.y += Math.random() - 0.5;	// Looks like its moving really fast
 
+			var shipImage;
+			if (gameMode == "normal") {
+				shipImage = document.getElementById("ship");
+			} else {
+				shipImage = document.getElementById("shrek");
+			}
+
 			canvas.globalAlpha = this.alpha;
-			canvas.drawImage(document.getElementById("ship"), this.x, this.y, this.width, this.height);
+			canvas.drawImage(shipImage, this.x, this.y, this.width, this.height);
 			canvas.globalAlpha = 1;
 		},
 		shoot : function() {	// Shoots bullets!
@@ -571,8 +579,10 @@ $(document).ready(function(){
 				firstTry = false;	// We're not green anymore
 				elapsed  = 0;		// Start from the beginning
 
-				bgMusic.pause()	// Reset music
+				bgMusic.pause();	// Reset music
+				allStar.pause();
 				bgMusic.currentTime = 0;
+				allStar.currentTime = 0;
 
 				if (score > highScore) {
 					createCookie("highscore", score + 1, "90");	// Improvements.
@@ -596,6 +606,7 @@ $(document).ready(function(){
 	}
 
 	bgMusic = document.getElementById('bg');
+	allStar = document.getElementById('allstar');
 	threeFX = document.getElementById('three');
 	threeFX.pause();
 	twoFX = document.getElementById('two');
@@ -604,6 +615,7 @@ $(document).ready(function(){
 	oneFX.pause();
 	bgMusic.play();
 	bgMusic.loop = true;	// OOOH MUSIC!
+	allStar.loop = true;
 
 	function randomColour(top, prev, avoid, avoid2) {	// Returns a random bright hex colour
 		var colors = [0, 0, 0];	// Initiate array
@@ -740,7 +752,11 @@ $(document).ready(function(){
 
 		score += 1;	// Add to the score!
 
-		bgMusic.play();	// Play music!
+		if (gameMode == "normal") {
+			bgMusic.play();
+		} else {
+			allStar.play();
+		}
 
 		if (alertAlpha < 1 && alertText != "" && elapsed - alertStart < 100) {	// Fade text in
 			alertAlpha += 0.1;
@@ -750,6 +766,25 @@ $(document).ready(function(){
 
 		if (alertAlpha <= 0.1) {	// Reset text when it's faded
 			alertText = "";
+		}
+
+		if (keydown.m && !muteThrottle) {	// Mute music
+			if (bgMusic.muted || allStar.muted){
+				bgMusic.muted = false;
+				oneFX.muted = false;
+				twoFX.muted = false;
+				threeFX.muted = false;
+				allStar.muted = false;
+			} else {
+				bgMusic.muted = true;
+				oneFX.muted = true;
+				twoFX.muted = true;
+				threeFX.muted = true;
+				allStar.muted = true;
+			}
+
+			muteThrottle = true;
+			setTimeout(function(){muteThrottle = false;}, 400);
 		}
 	}
 
@@ -762,6 +797,12 @@ $(document).ready(function(){
 		canvas.clearRect(0, 0, cWidth, cHeight);
 		canvas.fillStyle = bgColour;
 		canvas.fillRect(0, 0, cWidth, cHeight);	// Background colour!
+
+		if (gameMode != "normal") {
+			canvas.globalAlpha = 0.3;
+			canvas.drawImage(document.getElementById("farfaraway"), 0, 0, cWidth, cHeight);
+			canvas.globalAlpha = 1;
+		}
 
 		if (ship.state != "dead") {	// Draw unless we did died
 			ship.draw();
@@ -855,6 +896,7 @@ $(document).ready(function(){
 		bulletNumber        = 0;
 		bulletType          = "single";
 		bulletTimeout       = 350;
+		gameMode            = "normal";
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
