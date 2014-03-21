@@ -76,6 +76,7 @@ $(document).ready(function(){
 			bulletNumber  = 0;
 			bulletTimeout = 350;
 			gameMode = "normal";
+			allStar.pause();
 			if (slowMo === true) {
 				bulletSpeed *= 5;		// Reset the last one
 				alienBulletSpeed *= 5;
@@ -220,6 +221,7 @@ $(document).ready(function(){
 				case 9:
 					gameMode = "shrek";
 					bgMusic.pause();
+					allStar.currentTime = 0;
 
 					alertText = "SPACE SWAMP INCOMING!";
 					break;
@@ -579,10 +581,10 @@ $(document).ready(function(){
 				firstTry = false;	// We're not green anymore
 				elapsed  = 0;		// Start from the beginning
 
-				bgMusic.pause();	// Reset music
-				allStar.pause();
-				bgMusic.currentTime = 0;
 				allStar.currentTime = 0;
+				allStar.pause();
+				bgMusic.pause();	// Reset music
+				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
 					createCookie("highscore", score + 1, "90");	// Improvements.
