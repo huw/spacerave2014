@@ -581,7 +581,6 @@ $(document).ready(function(){
 				firstTry = false;	// We're not green anymore
 				elapsed  = 0;		// Start from the beginning
 
-				allStar.currentTime = 0;
 				allStar.pause();
 				bgMusic.pause();	// Reset music
 				bgMusic.currentTime = 0;
@@ -715,16 +714,20 @@ $(document).ready(function(){
 			return bullet.active;
 		});
 
+		if (aliens.filter(function(alien) {
+			return alien.active;
+		}).length == 0) {
+			pushAlienRow();
+			alienDirection = "right";
+		}
+
 		aliens.forEach(function(alien) {
 			if (alien.active) {
 				alien.direction();
 			}
 		});
 
-		if (aliens.length == 0) {
-			pushAlienRow();
-			alienDirection = "right";
-		}
+		console.log(aliens.length);
 
 		aliens.forEach(function(alien) {	// For each alien
 			alien.update();
@@ -758,8 +761,10 @@ $(document).ready(function(){
 
 		if (gameMode == "normal") {
 			bgMusic.play();
+			allStar.pause();
 		} else {
 			allStar.play();
+			bgMusic.pause();
 		}
 
 		if (alertAlpha < 1 && alertText != "" && elapsed - alertStart < 100) {	// Fade text in
