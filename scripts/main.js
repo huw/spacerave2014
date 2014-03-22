@@ -716,7 +716,9 @@ $(document).ready(function(){
 		});
 
 		aliens.forEach(function(alien) {
-			alien.direction();
+			if (alien.active) {
+				alien.direction();
+			}
 		});
 
 		if (aliens.length == 0) {
