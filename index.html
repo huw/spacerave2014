@@ -3,6 +3,10 @@
     <head>
         <title>#spacerave2014</title>
         <meta name='viewport' content='width=device-width, user-scalable=no'>
+        <meta name='apple-mobile-web-app-capable' content='yes'>
+        <meta name='mobile-web-app-capable' content='yes'>
+        <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'>
+
 
         <link rel='stylesheet' href='styles/style.css' />
 
@@ -20,7 +24,8 @@
 
         <script src='scripts/main.js'></script>
     </head>
-    <body>
+    <body onorientationchange="testOrientation();">
+        <h1 class="message"></h1>
         <canvas id="canvas"></canvas>
         <img src="images/ship.png" id="ship">
         <img src="images/alien.png" id="alien">
