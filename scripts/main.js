@@ -579,28 +579,28 @@ $(document).ready(function(){
 
 	var arrow = {
 		left: {
-			x: 40,
-			y: cHeight - 160,
-			width: 40,
-			height: 80
+			x: 30,
+			y: cHeight - 120,
+			width: 30,
+			height: 60
 		},
 		right: {
-			x: 160,
-			y: cHeight - 160,
-			width: 40,
-			height: 80
+			x: 120,
+			y: cHeight - 120,
+			width: 30,
+			height: 60
 		},
 		up: {
-			x: 80,
-			y: cHeight - 200,
-			width: 80,
-			height: 40
+			x: 60,
+			y: cHeight - 150,
+			width: 60,
+			height: 30
 		},
 		down: {
-			x: 80,
-			y: cHeight - 80,
-			width: 80,
-			height: 40
+			x: 60,
+			y: cHeight - 60,
+			width: 60,
+			height: 30
 		},
 
 		colour: "#FFF",
@@ -620,10 +620,10 @@ $(document).ready(function(){
 	}
 
 	var button = {
-		x: cWidth - 120,
-		y: cHeight - 120,
-		width: 80,
-		height: 80,
+		x: cWidth - 90,
+		y: cHeight - 90,
+		width: 90,
+		height: 90,
 		colour: "#FFF",
 		alpha: 0.5,
 
