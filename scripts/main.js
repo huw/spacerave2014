@@ -6,7 +6,8 @@ $(document).ready(function(){
 	$('canvas').attr('width', cWidth);		// Resize the canvas to our screen dimensions
 	$('canvas').attr('height', cHeight);
 
-	var canvas = document.getElementById("canvas").getContext("2d");	// Pull our canvas
+	var cElement = document.getElementById('canvas');
+	var canvas = cElement.getContext("2d");	// Pull our canvas
 
 	/****** LOADING SCREEN ******/
 	canvas.clearRect(0, 0, cWidth, cHeight);
@@ -647,30 +648,7 @@ $(document).ready(function(){
 		return "#" + colors.join("");	// Push back a valid hex colour
 	};
 
-	function getMousePos(e) {
-		var bounds = document.getElementById('canvas').getBoundingClientRect();
-
-		return {
-			x: e.clientX - bounds.left,
-			y: e.clientY - bounds.top,
-			width: 1,
-			height: 1
-		}
-	}
-
-	function touchHandlerDummy(e) {	// Workaround for canvas pausing on Android
-	    e.preventDefault();
-	    return false;
-	}
-	$('#canvas').on("touchstart", touchHandlerDummy);
-	$('#canvas').on("touchmove", touchHandlerDummy);
-	$('#canvas').on("touchend", touchHandlerDummy);
-
 	/****** ADD EVENT LISTENERS OUTSIDE OF INTERVAL FUNCTIONS ******/
-	$('#canvas').on("touchmove", function(e) {
-		mousePos = getMousePos(e);
-	});
-
 	var leftHalf = {
 		x: 0,
 		y: 0,
@@ -685,17 +663,30 @@ $(document).ready(function(){
 		height: cHeight
 	}
 
-	$('#canvas').on("touchstart", function(e) {
+	cElement.addEventListener("touchstart", function() {
 		mouseDown = true;
-	});
+	}, false);
 
-	$('#canvas').on("touchend", function(e) {
-		mouseDown = false;
-	});
+	cElement.addEventListener("touchmove", function(e) {
+		if (!e) {
+			var e = event;
+		}
+		e.preventDefault();
+		mousePos = {
+			x: e.targetTouches[0].pageX - cElement.offsetLeft,
+			y: e.targetTouches[0].pageY - cElement.offsetTop,
+			width: 1,
+			height: 1
+		}
+	}, false);
 
-	$('#canvas').on("touchcancel", function(e) {
+	cElement.addEventListener("touchend", function() {
 		mouseDown = false;
-	});
+	}, false);
+
+	document.body.addEventListener("touchcancel", function() {
+		mouseDown = false;
+	})
 
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
