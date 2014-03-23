@@ -663,11 +663,7 @@ $(document).ready(function(){
 		height: cHeight
 	}
 
-	cElement.addEventListener("touchstart", function() {
-		mouseDown = true;
-	}, false);
-
-	cElement.addEventListener("touchmove", function(e) {
+	function touchXY(e) {
 		if (!e) {
 			var e = event;
 		}
@@ -678,7 +674,14 @@ $(document).ready(function(){
 			width: 1,
 			height: 1
 		}
+	}
+
+	cElement.addEventListener("touchstart", function(e) {
+		mouseDown = true;
+		touchXY(e);
 	}, false);
+
+	cElement.addEventListener("touchmove", touchXY, false);
 
 	cElement.addEventListener("touchend", function() {
 		mouseDown = false;
