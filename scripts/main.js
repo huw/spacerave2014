@@ -319,6 +319,13 @@ $(document).ready(function(){
 
 	var starModifier = 1;
 	var firstRow     = true;
+	
+	var mousePos;
+	var buttondown = {
+		left: false,
+		right: false
+	}
+	var mouseDown = false;
 
 	pushAlienRow();
 
@@ -596,7 +603,9 @@ $(document).ready(function(){
 		for (var x = 0; x < 10; x++) {
 			aliens.push(Alien({
 				x: x * (cWidth * 0.0625),	// Add a space between each one
-				y: 0
+				y: 0,
+				width: 1,
+				height: 1
 			}));
 		}
 
@@ -638,14 +647,65 @@ $(document).ready(function(){
 		return "#" + colors.join("");	// Push back a valid hex colour
 	};
 
+	function getMousePos(e) {
+		var bounds = document.getElementById('canvas').getBoundingClientRect();
+
+		return {
+			x: e.clientX - bounds.left,
+			y: e.clientY - bounds.top,
+			width: 1,
+			height: 1
+		}
+	}
+
+	/****** ADD EVENT LISTENERS OUTSIDE OF INTERVAL FUNCTIONS ******/
+	$('#canvas').mousemove(function(e) {
+		mousePos = getMousePos(e);
+	});
+
+	var leftHalf = {
+		x: 0,
+		y: 0,
+		width: cWidth / 2,
+		height: cHeight
+	}
+
+	var rightHalf = {
+		x: cWidth / 2,
+		y: 0,
+		width: cWidth / 2,
+		height: cHeight
+	}
+
+	$('#canvas').mousedown(function(e) {
+		mouseDown = true;
+	});
+
+	$('#canvas').mouseup(function(e) {
+		mouseDown = false;
+	});
+
 	/****** DEFINE UPDATE AND DRAW FUNCTIONS ******/
 	function update() {
 		wheelOfSpin();
 
+		if (mouseDown) {
+			if (collides(mousePos, leftHalf)) {
+				buttondown.right = false;
+				buttondown.left = true;
+			} else if (collides(mousePos, rightHalf)) {
+				buttondown.left = false;
+				buttondown.right = true;
+			}
+		} else {
+			buttondown.left = false;
+			buttondown.right = false;
+		}
+
 		if (ship.state == "alive") {	// You can't move when you're dead
-			if (keydown.left || keydown.a) {	// Detect movement keys, move appropriately
+			if (keydown.left || keydown.a || buttondown.left) {	// Detect movement keys, move appropriately
 				ship.x -= ship.speed;
-			} else if (keydown.right || keydown.d) {
+			} else if (keydown.right || keydown.d || buttondown.right) {
 				ship.x += ship.speed;
 			} else if (keydown.up || keydown.w) {
 				ship.y -= ship.speed;
@@ -670,16 +730,6 @@ $(document).ready(function(){
 					setTimeout(function(){bulletThrottle = false;}, bulletTimeout);	// Shoot on the beat
 				}
 			}
-
-			$("#canvas").click(function(e){	// Same thing as above except somewhat clickier
-				clickUsed = true;
-
-			    if (bulletThrottle === false) {
-			    	ship.shoot();
-			    	bulletThrottle = true;
-			    	setTimeout(function(){bulletThrottle = false;}, bulletTimeout);
-			    }
-			});
 		}
 
 		if (ship.x <= 0) {	// Reset position if we go out of bounds
@@ -726,8 +776,6 @@ $(document).ready(function(){
 				alien.direction();
 			}
 		});
-
-		console.log(aliens.length);
 
 		aliens.forEach(function(alien) {	// For each alien
 			alien.update();
