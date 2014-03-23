@@ -495,7 +495,7 @@ $(document).ready(function(){
 		x     : cWidth / 2,	// Start at about the middle-bottom
 		y     : cHeight - 60,
 		width : shipWidth,
-		height: this.width,
+		height: shipWidth,
 		speed : cWidth * 0.006,
 		alpha : 1,
 		state : "alive",
