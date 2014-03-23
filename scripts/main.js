@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 	/****** LOADING SCREEN ******/
 	canvas.clearRect(0, 0, cWidth, cHeight);
-	canvas.font = "100px PressStart2P";
+	canvas.font = (cWidth / 13) + "px PressStart2P";
 	canvas.fillStyle = "#FFF";
 	canvas.textAlign = "center";
 	canvas.fillText("LOADING", cWidth / 2, cHeight / 2);
@@ -324,11 +324,15 @@ $(document).ready(function(){
 	var bulletSpeed      = Math.floor(cHeight * 0.025);	// The speed is based on the height so users with tall screens have no advantage
 	var alienBulletSpeed = Math.floor(cHeight * 0.006);
 	var alienSpeed       = Math.floor(cWidth * 0.0037);	// If we don't round, they misalign
-	var bulletWidth      = Math.floor(cWidth * 0.003);
-	var bulletHeight     = Math.floor(cWidth * 0.008);
-	var alienBulletWidth = Math.floor(cWidth * 0.004);
+	var bulletWidth      = Math.floor(cWidth * 0.006);
+	var bulletHeight     = Math.floor(cWidth * 0.016);
+	var alienBulletWidth = Math.floor(cWidth * 0.008);
 	var xSpeedMod        = 1;
 	var bulletTimeout    = 350;
+
+	if (jQuery.browser.mobile) {
+		bulletWidth, bulletHeight, alienBulletWidth *= 2;
+	}
 
 	var alienBulletInt = 700;
 	var invincible     = false;
@@ -427,8 +431,12 @@ $(document).ready(function(){
 	function Alien(i) {	// Alien class constructor
 		i.active = true;
 
-		i.width  = cWidth * 0.025;	// A lot of the game revolves around them
-		i.height = i.width;			// being equal between screens
+		if (jQuery.browser.mobile) {
+			i.width = cWidth * 0.04;
+		} else {
+			i.width = cWidth * 0.025;
+		}
+		i.height = i.width;
 		i.alpha  = 1;
 		i.speed  = alienSpeed;
 		i.state  = "alive";	// This is a determinator for animations
@@ -476,11 +484,17 @@ $(document).ready(function(){
 		return i;
 	}
 
+	if (jQuery.browser.mobile) {
+		var shipWidth = cWidth * 0.04;
+	} else {
+		var shipWidth = cWidth * 0.025;
+	}
+
 	var ship = {	// Ship object constructor. It doesn't need to be a function
 		colour: "#0BF",
 		x     : cWidth / 2,	// Start at about the middle-bottom
 		y     : cHeight - 60,
-		width : cWidth * 0.025,	// You know the drill with relative sizing
+		width : shipWidth,
 		height: cWidth * 0.025,
 		speed : cWidth * 0.006,
 		alpha : 1,
@@ -984,12 +998,12 @@ $(document).ready(function(){
 			}
 		}
 
-		canvas.font = "30px PressStart2P";	// Print our score
+		canvas.font = (cWidth / 42) + "px PressStart2P";	// Print our score
 		canvas.fillStyle = "#FFF";
 		canvas.textAlign = "left";
 		canvas.fillText("SCORE:" + score, 10, cHeight);
 
-		canvas.font = "40px PressStart2P";	// Print the latest alert
+		canvas.font = (cWidth / 32) + "px PressStart2P";	// Print the latest alert
 		canvas.fillStyle = "rgba(255, 255, 255, " + alertAlpha + ")";
 		canvas.textAlign = "center";
 		canvas.fillText(alertText, cWidth / 2, 55);
@@ -1020,7 +1034,7 @@ $(document).ready(function(){
 		score               = 0;
 		ship.speed          = cWidth * 0.006;
 		timeLeft            = 3;
-		textSize            = 80;
+		textSize            = cWidth / 16;
 		numberY             = cHeight / 2 + 90;
 		bulletSpeed         = Math.floor(cHeight * 0.025);
 		alienBulletSpeed    = Math.floor(cHeight * 0.006);
@@ -1056,7 +1070,7 @@ $(document).ready(function(){
 
 	var timeLeft = 3;
 	var firstTry = true;
-	var textSize = 80;
+	var textSize = cWidth / 16;
 	var numberY  = cHeight / 2 + 90;
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
@@ -1071,7 +1085,7 @@ $(document).ready(function(){
 			var textBody  = "GAME OVER";	// You only lost if you were there
 		}
 
-		canvas.font = "80px PressStart2P";
+		canvas.font = (cWidth / 16) + "px PressStart2P";
 		canvas.fillStyle = textColor;
 		canvas.textAlign = 'center';
 		canvas.fillText(textBody, cWidth / 2, cHeight / 2 - 80);
@@ -1080,11 +1094,11 @@ $(document).ready(function(){
 			timeLeft--;
 		}
 
-		textSize += 0.4;	// Text gets bigger
-		numberY  += 0.2;	// from the center point
+		textSize += (cWidth / 3200);	// Text gets bigger
+		numberY  += (cWidth / 6400);	// from the center point
 
 		if (!firstTry) {	// Only show score if we got one
-			canvas.font = "40px PressStart2P";
+			canvas.font = (cWidth / 32) + "px PressStart2P";
 			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + 180);
 
 			/*canvas.font = "25px PressStart2P";
@@ -1123,13 +1137,13 @@ $(document).ready(function(){
 			}*/
 		}
 
-		canvas.font = "25px PressStart2P";	// Highscores here
+		canvas.font = (cWidth / 51) + "px PressStart2P";	// Highscores here
 		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + 260)
 
 		canvas.font = textSize + "px PressStart2P";	// Show us the time left in seconds
 		canvas.fillText(timeLeft, cWidth / 2, numberY);
 
-		canvas.font = "20px PressStart2P";
+		canvas.font = (cWidth / 64) + "px PressStart2P";
 
 		if (!arrowsUsed) {	// Generate tutorial text. This one's pretty big, but very useful
 			if (!wasdUsed) {
