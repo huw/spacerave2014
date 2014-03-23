@@ -344,7 +344,7 @@ $(document).ready(function(){
 	var starModifier = 1;
 	var firstRow     = true;
 	
-	var mousePos;
+	var mousePos = [];
 	var buttondown = {
 		left: false,
 		right: false,
@@ -353,6 +353,7 @@ $(document).ready(function(){
 		fire: false
 	}
 	var mouseDown = false;
+	var currentTouches = 0;
 
 	pushAlienRow();
 
@@ -748,11 +749,14 @@ $(document).ready(function(){
 			var e = event;
 		}
 		e.preventDefault();
-		mousePos = {
-			x: e.targetTouches[e.targetTouches.length - 1].pageX - cElement.offsetLeft,
-			y: e.targetTouches[e.targetTouches.length - 1].pageY - cElement.offsetTop,
-			width: 1,
-			height: 1
+		currentTouches = e.targetTouches.length;
+		for (var i = 0; i < currentTouches; i++) {
+			mousePos[i] = {
+				x: e.targetTouches[i].pageX - cElement.offsetLeft,
+				y: e.targetTouches[i].pageY - cElement.offsetTop,
+				width: 1,
+				height: 1
+			}
 		}
 	}
 
@@ -776,22 +780,24 @@ $(document).ready(function(){
 		wheelOfSpin();
 
 		if (mouseDown) {	// If we're touching the screen
-			if (collides(mousePos, arrow.left)) {
-				buttondown.up = buttondown.right = buttondown.down = false;
-				buttondown.left = true;
-			} else if (collides(mousePos, arrow.right)) {
-				buttondown.left = buttondown.up = buttondown.down = false;
-				buttondown.right = true;
-			} else if (collides(mousePos, arrow.up)) {
-				buttondown.left = buttondown.right = buttondown.down = false;
-				buttondown.up = true;
-			} else if (collides(mousePos, arrow.down)) {
-				buttondown.left = buttondown.right = buttondown.up = false;
-				buttondown.down = true;
-			}
+			for (var i = 0; i < currentTouches; i++) {
+				if (collides(mousePos[i], arrow.left)) {
+					buttondown.up = buttondown.right = buttondown.down = false;
+					buttondown.left = true;
+				} else if (collides(mousePos[i], arrow.right)) {
+					buttondown.left = buttondown.up = buttondown.down = false;
+					buttondown.right = true;
+				} else if (collides(mousePos[i], arrow.up)) {
+					buttondown.left = buttondown.right = buttondown.down = false;
+					buttondown.up = true;
+				} else if (collides(mousePos[i], arrow.down)) {
+					buttondown.left = buttondown.right = buttondown.up = false;
+					buttondown.down = true;
+				}
 
-			if (collides(mousePos, button)) {
-				buttondown.fire = true;
+				if (collides(mousePos[i], button)) {
+					buttondown.fire = true;
+				}
 			}
 		} else {
 			buttondown.left = buttondown.right = buttondown.up = buttondown.down = buttondown.fire = false;
