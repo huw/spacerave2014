@@ -659,7 +659,7 @@ $(document).ready(function(){
 	}
 
 	/****** ADD EVENT LISTENERS OUTSIDE OF INTERVAL FUNCTIONS ******/
-	$('#canvas').touchmove(function(e) {
+	$('#canvas').on("touchmove", function(e) {
 		mousePos = getMousePos(e);
 	});
 
@@ -677,15 +677,15 @@ $(document).ready(function(){
 		height: cHeight
 	}
 
-	$('#canvas').touchstart(function(e) {
+	$('#canvas').on("touchstart", function(e) {
 		mouseDown = true;
 	});
 
-	$('#canvas').touchend(function(e) {
+	$('#canvas').on("touchend", function(e) {
 		mouseDown = false;
 	});
 
-	$('#canvas').touchcancel(function(e) {
+	$('#canvas').on("touchcancel", function(e) {
 		mouseDown = false;
 	});
 
