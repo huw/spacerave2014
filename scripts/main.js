@@ -669,8 +669,8 @@ $(document).ready(function(){
 		}
 		e.preventDefault();
 		mousePos = {
-			x: e.targetTouches[0].pageX - cElement.offsetLeft,
-			y: e.targetTouches[0].pageY - cElement.offsetTop,
+			x: e.targetTouches[e.targetTouches.length - 1].pageX - cElement.offsetLeft,
+			y: e.targetTouches[e.targetTouches.length - 1].pageY - cElement.offsetTop,
 			width: 1,
 			height: 1
 		}
