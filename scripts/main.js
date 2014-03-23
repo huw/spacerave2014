@@ -331,7 +331,7 @@ $(document).ready(function(){
 	var bulletTimeout    = 350;
 
 	if (jQuery.browser.mobile) {
-		bulletWidth, bulletHeight, alienBulletWidth *= 2;
+		bulletWidth, bulletHeight, alienBulletWidth *= 4;
 	}
 
 	var alienBulletInt = 700;
@@ -1052,6 +1052,10 @@ $(document).ready(function(){
 		bulletType          = "single";
 		bulletTimeout       = 350;
 		gameMode            = "normal";
+
+		if (jQuery.browser.mobile) {
+			bulletWidth, bulletHeight, alienBulletWidth *= 4;
+		}
 
 		aliens       = [];	// Clearing these arrays works because they're either
 		bullets      = [];	// initially rebuilt or rebuilt on frame
