@@ -1006,7 +1006,7 @@ $(document).ready(function(){
 		canvas.font = (cWidth / 32) + "px PressStart2P";	// Print the latest alert
 		canvas.fillStyle = "rgba(255, 255, 255, " + alertAlpha + ")";
 		canvas.textAlign = "center";
-		canvas.fillText(alertText, cWidth / 2, 55);
+		canvas.fillText(alertText, cWidth / 2, (cWidth / 23));
 
 		canvas.fillStyle = "#F0F";
 		canvas.fillRect(0, 0, cWidth * (((elapsed + 330) % 330) / 330), 5);
@@ -1035,7 +1035,7 @@ $(document).ready(function(){
 		ship.speed          = cWidth * 0.006;
 		timeLeft            = 3;
 		textSize            = cWidth / 16;
-		numberY             = cHeight / 2 + 90;
+		numberY             = cHeight / 2 + (cWidth / 14);
 		bulletSpeed         = Math.floor(cHeight * 0.025);
 		alienBulletSpeed    = Math.floor(cHeight * 0.006);
 		alienSpeed          = Math.floor(cWidth * 0.0037);
@@ -1071,7 +1071,7 @@ $(document).ready(function(){
 	var timeLeft = 3;
 	var firstTry = true;
 	var textSize = cWidth / 16;
-	var numberY  = cHeight / 2 + 90;
+	var numberY  = cHeight / 2 + (cWidth / 14);
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
@@ -1088,7 +1088,7 @@ $(document).ready(function(){
 		canvas.font = (cWidth / 16) + "px PressStart2P";
 		canvas.fillStyle = textColor;
 		canvas.textAlign = 'center';
-		canvas.fillText(textBody, cWidth / 2, cHeight / 2 - 80);
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 - (cWidth / 16));
 
 		if (elapsed % 60 == 0) {	// If a second passes
 			timeLeft--;
@@ -1099,7 +1099,7 @@ $(document).ready(function(){
 
 		if (!firstTry) {	// Only show score if we got one
 			canvas.font = (cWidth / 32) + "px PressStart2P";
-			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + 180);
+			canvas.fillText("Score:" + score, cWidth / 2, cHeight / 2 + (cWidth / 7));
 
 			/*canvas.font = "25px PressStart2P";
 			canvas.fillStyle = "#55ACEE";
@@ -1138,7 +1138,7 @@ $(document).ready(function(){
 		}
 
 		canvas.font = (cWidth / 51) + "px PressStart2P";	// Highscores here
-		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + 260)
+		canvas.fillText("Highscore:" + highScore, cWidth / 2, cHeight / 2 + (cWidth / 5));
 
 		canvas.font = textSize + "px PressStart2P";	// Show us the time left in seconds
 		canvas.fillText(timeLeft, cWidth / 2, numberY);
@@ -1207,6 +1207,6 @@ $(document).ready(function(){
 			}
 		}
 
-		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + 220);	// Fill the tutorial text
+		canvas.fillText(textBody, cWidth / 2, cHeight / 2 + (cWidth / 6));	// Fill the tutorial text
 	}
 });
