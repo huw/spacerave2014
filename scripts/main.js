@@ -658,6 +658,14 @@ $(document).ready(function(){
 		}
 	}
 
+	function touchHandlerDummy(e) {	// Workaround for canvas pausing on Android
+	    e.preventDefault();
+	    return false;
+	}
+	$('#canvas').on("touchstart", touchHandlerDummy);
+	$('#canvas').on("touchmove", touchHandlerDummy);
+	$('#canvas').on("touchend", touchHandlerDummy);
+
 	/****** ADD EVENT LISTENERS OUTSIDE OF INTERVAL FUNCTIONS ******/
 	$('#canvas').on("touchmove", function(e) {
 		mousePos = getMousePos(e);
