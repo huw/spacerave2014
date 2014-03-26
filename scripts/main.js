@@ -1,19 +1,81 @@
 $(document).ready(function(){
 	/****** INITIAL DEFINITION *****/
-	var cWidth = 1024//$(window).innerWidth() - 5;	// Make the canvas width most of the window size
-	var cHeight = 768//$(window).innerHeight() - 5;	// The extra five is so arrow keys don't scroll the document
+	var cWidth = window.innerWidth - 5;	// Make the canvas width most of the window size
+	var cHeight = window.innerHeight - 5;	// The extra five is so arrow keys don't scroll the document
 
-	function testOrientation() {
+	function screenSize() {	// This function runs tests to change stuff when the window changes
+		cWidth = window.innerWidth - 5;
+		cHeight = window.innerHeight - 5;
+
+		$('canvas').attr('width', cWidth);
+		$('canvas').attr('height', cHeight);
+
 		if (cWidth < cHeight) {
-			$('#canvas').hide();
-			$('.message').text("Please rotate into landscape.");
+			$('canvas').hide();
+			$('.message').text("Please rotate into landscape or make your window wider.");
+		} else {
+			$('canvas').show();
+			$('.message').text("");
 		}
+
+		bulletSpeed      = Math.floor(cHeight * 0.025);
+		alienBulletSpeed = Math.floor(cHeight * 0.006);
+		alienSpeed       = Math.floor(cWidth * 0.0037);
+		bulletWidth      = Math.floor(cWidth * 0.006);
+		bulletHeight     = Math.floor(cWidth * 0.016);
+		alienBulletWidth = Math.floor(cWidth * 0.008);
+
+		stars.forEach(function(star) {
+			star.x = Math.random() * cWidth;
+		});
+
+		if (jQuery.browser.mobile) {
+			ship.width = cWidth * 0.04;
+		} else {
+			ship.width = cWidth * 0.025;
+		}
+
+		aliens.forEach(function(alien) {
+			if (jQuery.browser.mobile) {
+				alien.width = cWidth * 0.04;
+			} else {
+				alien.width = cWidth * 0.025;
+			}
+
+			alien.speed = alienSpeed;
+		});
+
+		alienBullets.forEach(function(bullet) {
+			bullet.speed = alienBulletSpeed;
+			bullet.width = alienBulletWidth;
+			bullet.height = bullet.width;
+		});
+
+		bullets.forEach(function(bullet) {
+			if (bullet.constructor == Bullet) {	// If it's a bullet not a laser
+				bullet.speed = bulletSpeed;
+				bullet.width = bulletWidth;
+				bullet.height = bulletHeight;
+			} else if (bullet.constructor == Laser) {
+				bullet.width = bulletWidth * 3;
+				bullet.height = cHeight;
+			}
+		});
 	}
 
-	testOrientation();
-
-	$('canvas').attr('width', cWidth);		// Resize the canvas to our screen dimensions
+	$('canvas').attr('width', cWidth);
 	$('canvas').attr('height', cHeight);
+
+	if (cWidth < cHeight) {
+		$('canvas').hide();
+		$('.message').text("Please rotate into landscape or make your window wider.");
+	} else {
+		$('canvas').show();
+		$('.message').text("");
+	}
+
+	$(window).on('resize', screenSize);	// Run stuff when the window changes
+	$(window).on('orientationchange', screenSize);
 
 	var cElement = document.getElementById('canvas');
 	var canvas = cElement.getContext("2d");	// Pull our canvas
@@ -22,7 +84,7 @@ $(document).ready(function(){
 	canvas.clearRect(0, 0, cWidth, cHeight);
 	canvas.font = (cWidth / 13) + "px PressStart2P";
 	canvas.fillStyle = "#FFF";
-	canvas.textAlign = "center";
+	canvas.textAlign = "center"; 
 	canvas.fillText("LOADING", cWidth / 2, cHeight / 2);
 
 	/****** INITIATE CANVAS ******/
