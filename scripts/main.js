@@ -4,6 +4,8 @@ $(document).ready(function(){
 	var cHeight = window.innerHeight - 5;	// The extra five is so arrow keys don't scroll the document
 
 	function screenSize() {	// This function runs tests to change stuff when the window changes
+		window_focus = false;
+
 		cWidth = window.innerWidth - 5;
 		cHeight = window.innerHeight - 5;
 
@@ -61,6 +63,8 @@ $(document).ready(function(){
 				bullet.height = cHeight;
 			}
 		});
+
+		setTimeout(function(){window_focus = true;}, 400);
 	}
 
 	$('canvas').attr('width', cWidth);
