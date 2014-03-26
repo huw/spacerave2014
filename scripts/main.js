@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	/****** INITIAL DEFINITION *****/
-	var cWidth = $(window).innerWidth() - 5;	// Make the canvas width most of the window size
-	var cHeight = $(window).innerHeight() - 5;	// The extra five is so arrow keys don't scroll the document
+	var cWidth = 1024//$(window).innerWidth() - 5;	// Make the canvas width most of the window size
+	var cHeight = 768//$(window).innerHeight() - 5;	// The extra five is so arrow keys don't scroll the document
 
 	function testOrientation() {
 		if (cWidth < cHeight) {
@@ -343,7 +343,7 @@ $(document).ready(function(){
 
 	var starModifier = 1;
 	var firstRow     = true;
-	
+
 	var mousePos = [];
 	var buttondown = {
 		left: false,
