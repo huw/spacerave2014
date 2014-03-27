@@ -27,6 +27,9 @@ $(document).ready(function(){
 		bulletHeight     = Math.floor(cWidth * 0.016);
 		alienBulletWidth = Math.floor(cWidth * 0.008);
 
+		textSize = cWidth / 16;
+		numberY = cHeight / 2 + (cWidth / 14);
+
 		stars.forEach(function(star) {
 			star.x = Math.random() * cWidth;
 		});
@@ -38,6 +41,7 @@ $(document).ready(function(){
 		}
 
 		ship.height = ship.width;
+		ship.speed = cWidth * 0.006;
 
 		aliens.forEach(function(alien) {
 			if (jQuery.browser.mobile) {
@@ -49,6 +53,10 @@ $(document).ready(function(){
 			alien.height = alien.width;
 			alien.speed = alienSpeed;
 		});
+
+		for (var x = 0; x < 10; x++) {
+			aliens[x].x = x * (cWidth * 0.0625);
+		}
 
 		alienBullets.forEach(function(bullet) {
 			bullet.speed = alienBulletSpeed;
@@ -1164,7 +1172,7 @@ $(document).ready(function(){
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
 		if (chrome.storage) {
-			chrome.storage.sync.get('highscore', function(value){highScore = value.highscore;});
+			chrome.storage.sync.get('highscore', function(value){highScore = value.highscore||0;});
 		} else {
 			highScore = getCookie("highscore");	// Grabbin scores
 		}
@@ -1186,8 +1194,8 @@ $(document).ready(function(){
 			timeLeft--;
 		}
 
-		textSize += (cWidth / 3200);	// Text gets bigger
-		numberY  += (cWidth / 6400);	// from the center point
+		textSize += cWidth / 3200;	// Text gets bigger
+		numberY  += (cWidth / 3200) / 2;	// from the center point
 
 		if (!firstTry) {	// Only show score if we got one
 			canvas.font = (cWidth / 32) + "px PressStart2P";
