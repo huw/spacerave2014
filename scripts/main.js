@@ -37,6 +37,8 @@ $(document).ready(function(){
 			ship.width = cWidth * 0.025;
 		}
 
+		ship.height = ship.width;
+
 		aliens.forEach(function(alien) {
 			if (jQuery.browser.mobile) {
 				alien.width = cWidth * 0.04;
@@ -44,6 +46,7 @@ $(document).ready(function(){
 				alien.width = cWidth * 0.025;
 			}
 
+			alien.height = alien.width;
 			alien.speed = alienSpeed;
 		});
 
@@ -88,7 +91,7 @@ $(document).ready(function(){
 	canvas.clearRect(0, 0, cWidth, cHeight);
 	canvas.font = (cWidth / 13) + "px PressStart2P";
 	canvas.fillStyle = "#FFF";
-	canvas.textAlign = "center"; 
+	canvas.textAlign = "center";
 	canvas.fillText("LOADING", cWidth / 2, cHeight / 2);
 
 	/****** INITIATE CANVAS ******/
