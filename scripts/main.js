@@ -1,19 +1,96 @@
 $(document).ready(function(){
 	/****** INITIAL DEFINITION *****/
-	var cWidth = $(window).innerWidth() - 5;	// Make the canvas width most of the window size
-	var cHeight = $(window).innerHeight() - 5;	// The extra five is so arrow keys don't scroll the document
+	var cWidth = window.innerWidth - 5;	// Make the canvas width most of the window size
+	var cHeight = window.innerHeight - 5;	// The extra five is so arrow keys don't scroll the document
 
-	function testOrientation() {
+	function screenSize() {	// This function runs tests to change stuff when the window changes
+		window_focus = false;
+
+		cWidth = window.innerWidth - 5;
+		cHeight = window.innerHeight - 5;
+
+		$('canvas').attr('width', cWidth);
+		$('canvas').attr('height', cHeight);
+
 		if (cWidth < cHeight) {
-			$('#canvas').hide();
-			$('.message').text("Please rotate into landscape.");
+			$('canvas').hide();
+			$('.message').text("Please rotate into landscape or make your window wider.");
+		} else {
+			$('canvas').show();
+			$('.message').text("");
 		}
+
+		bulletSpeed      = Math.floor(cHeight * 0.025);
+		alienBulletSpeed = Math.floor(cHeight * 0.006);
+		alienSpeed       = Math.floor(cWidth * 0.0037);
+		bulletWidth      = Math.floor(cWidth * 0.006);
+		bulletHeight     = Math.floor(cWidth * 0.016);
+		alienBulletWidth = Math.floor(cWidth * 0.008);
+
+		textSize = cWidth / 16;
+		numberY = cHeight / 2 + (cWidth / 14);
+
+		stars.forEach(function(star) {
+			star.x = Math.random() * cWidth;
+		});
+
+		if (jQuery.browser.mobile) {
+			ship.width = cWidth * 0.04;
+		} else {
+			ship.width = cWidth * 0.025;
+		}
+
+		ship.height = ship.width;
+		ship.speed = cWidth * 0.006;
+
+		aliens.forEach(function(alien) {
+			if (jQuery.browser.mobile) {
+				alien.width = cWidth * 0.04;
+			} else {
+				alien.width = cWidth * 0.025;
+			}
+
+			alien.height = alien.width;
+			alien.speed = alienSpeed;
+		});
+
+		for (var x = 0; x < 10; x++) {
+			aliens[x].x = x * (cWidth * 0.0625);
+		}
+
+		alienBullets.forEach(function(bullet) {
+			bullet.speed = alienBulletSpeed;
+			bullet.width = alienBulletWidth;
+			bullet.height = bullet.width;
+		});
+
+		bullets.forEach(function(bullet) {
+			if (bullet.constructor == Bullet) {	// If it's a bullet not a laser
+				bullet.speed = bulletSpeed;
+				bullet.width = bulletWidth;
+				bullet.height = bulletHeight;
+			} else if (bullet.constructor == Laser) {
+				bullet.width = bulletWidth * 3;
+				bullet.height = cHeight;
+			}
+		});
+
+		setTimeout(function(){window_focus = true;}, 400);
 	}
 
-	testOrientation();
-
-	$('canvas').attr('width', cWidth);		// Resize the canvas to our screen dimensions
+	$('canvas').attr('width', cWidth);
 	$('canvas').attr('height', cHeight);
+
+	if (cWidth < cHeight) {
+		$('canvas').hide();
+		$('.message').text("Please rotate into landscape or make your window wider.");
+	} else {
+		$('canvas').show();
+		$('.message').text("");
+	}
+
+	$(window).on('resize', screenSize);	// Run stuff when the window changes
+	$(window).on('orientationchange', screenSize);
 
 	var cElement = document.getElementById('canvas');
 	var canvas = cElement.getContext("2d");	// Pull our canvas
@@ -266,30 +343,30 @@ $(document).ready(function(){
 	/* Again, I don't wanna reinvent the wheel.
 	   Taken from stackoverflow */
 	var createCookie = function(name, value, days) {
-	    var expires;
-	    if (days) {
-	        var date = new Date();
-	        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-	        expires = "; expires=" + date.toGMTString();
-	    } else {
-	        expires = "";
-	    }
-	    document.cookie = name + "=" + value + expires + "; path=/";
+    var expires;
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toGMTString();
+    } else {
+      expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
 	}
 
 	function getCookie(c_name) {
-	    if (document.cookie.length > 0) {
-	        c_start = document.cookie.indexOf(c_name + "=");
-	        if (c_start != -1) {
-	            c_start = c_start + c_name.length + 1;
-	            c_end = document.cookie.indexOf(";", c_start);
-	            if (c_end == -1) {
-	                c_end = document.cookie.length;
-	            }
-	            return unescape(document.cookie.substring(c_start, c_end));
-	        }
-	    }
-	    return 0;
+    if (document.cookie.length > 0) {
+      c_start = document.cookie.indexOf(c_name + "=");
+      if (c_start != -1) {
+        c_start = c_start + c_name.length + 1;
+        c_end = document.cookie.indexOf(";", c_start);
+        if (c_end == -1) {
+          c_end = document.cookie.length;
+        }
+        return unescape(document.cookie.substring(c_start, c_end));
+      }
+    }
+    return 0;
 	}
 
 	/****** JQUERY MOBILE BROWSER DETECTOR *****/
@@ -343,7 +420,7 @@ $(document).ready(function(){
 
 	var starModifier = 1;
 	var firstRow     = true;
-	
+
 	var mousePos = [];
 	var buttondown = {
 		left: false,
@@ -689,7 +766,12 @@ $(document).ready(function(){
 				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
-					createCookie("highscore", score + 1, "90");	// Improvements.
+					if (chrome.storage) {
+						console.log("storage works");
+						chrome.storage.sync.set({"highscore": score + 1});
+					} else {
+						createCookie("highscore", score + 1, "90");	// Improvements.
+					}
 				}
 			}
 		}
@@ -1089,7 +1171,11 @@ $(document).ready(function(){
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
-		highScore = getCookie("highscore");	// Grabbin scores
+		if (chrome.storage) {
+			chrome.storage.sync.get('highscore', function(value){highScore = value.highscore||0;});
+		} else {
+			highScore = getCookie("highscore");	// Grabbin scores
+		}
 
 		if (firstTry) {
 			textColor = "#FFF";
@@ -1108,8 +1194,8 @@ $(document).ready(function(){
 			timeLeft--;
 		}
 
-		textSize += (cWidth / 3200);	// Text gets bigger
-		numberY  += (cWidth / 6400);	// from the center point
+		textSize += cWidth / 3200;	// Text gets bigger
+		numberY  += (cWidth / 3200) / 2;	// from the center point
 
 		if (!firstTry) {	// Only show score if we got one
 			canvas.font = (cWidth / 32) + "px PressStart2P";
