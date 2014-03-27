@@ -335,30 +335,30 @@ $(document).ready(function(){
 	/* Again, I don't wanna reinvent the wheel.
 	   Taken from stackoverflow */
 	var createCookie = function(name, value, days) {
-	    var expires;
-	    if (days) {
-	        var date = new Date();
-	        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-	        expires = "; expires=" + date.toGMTString();
-	    } else {
-	        expires = "";
-	    }
-	    document.cookie = name + "=" + value + expires + "; path=/";
+    var expires;
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toGMTString();
+    } else {
+      expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
 	}
 
 	function getCookie(c_name) {
-	    if (document.cookie.length > 0) {
-	        c_start = document.cookie.indexOf(c_name + "=");
-	        if (c_start != -1) {
-	            c_start = c_start + c_name.length + 1;
-	            c_end = document.cookie.indexOf(";", c_start);
-	            if (c_end == -1) {
-	                c_end = document.cookie.length;
-	            }
-	            return unescape(document.cookie.substring(c_start, c_end));
-	        }
-	    }
-	    return 0;
+    if (document.cookie.length > 0) {
+      c_start = document.cookie.indexOf(c_name + "=");
+      if (c_start != -1) {
+        c_start = c_start + c_name.length + 1;
+        c_end = document.cookie.indexOf(";", c_start);
+        if (c_end == -1) {
+          c_end = document.cookie.length;
+        }
+        return unescape(document.cookie.substring(c_start, c_end));
+      }
+    }
+    return 0;
 	}
 
 	/****** JQUERY MOBILE BROWSER DETECTOR *****/
@@ -758,7 +758,12 @@ $(document).ready(function(){
 				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
-					createCookie("highscore", score + 1, "90");	// Improvements.
+					if (chrome.storage) {
+						console.log("storage works");
+						chrome.storage.sync.set({"highscore": score + 1});
+					} else {
+						createCookie("highscore", score + 1, "90");	// Improvements.
+					}
 				}
 			}
 		}
@@ -1158,7 +1163,11 @@ $(document).ready(function(){
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
-		highScore = getCookie("highscore");	// Grabbin scores
+		if (chrome.storage) {
+			chrome.storage.sync.get('highscore', function(value){highScore = value.highscore;});
+		} else {
+			highScore = getCookie("highscore");	// Grabbin scores
+		}
 
 		if (firstTry) {
 			textColor = "#FFF";
