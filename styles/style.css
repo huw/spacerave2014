@@ -39,5 +39,6 @@ h1 {
 }
 
 .message {
-  margin-top: 1.3em;
+  position: relative;
+  top: 1.3em;
 }
