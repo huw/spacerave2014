@@ -5,7 +5,7 @@ Luckily for me, the marking criteria didn't specify a language to use. I didn't 
 
 HTML5 Canvas can do better at the kind of task I wanted to achieve. I wanted a fast-paced game which was *enjoyable*. Gaming using GDI+ was *not* enjoyable.
 
-So rewrote the code to canvas, added a bunch of features which I wanted, and finally you have this, **#spacerave2014**. The name is inspired by obsessive Twitter and Instagram hashtagging, btw
+So rewrote the code to canvas, added a bunch of features which I wanted, and finally you have this, **#spacerave2014**. The name is inspired by viral marketing crossed with that hipster hashtagging trend which makes the app seem somewhat cooler.
 
 ##How to play
 All instructions are included when you start the game, but if you need a refresher:
@@ -21,14 +21,16 @@ Every ~3 seconds, the Wheel of Spin is activated. This chooses a random gameplay
 ##The Future
 Things I will add:
 
-* More Wheel of Spin options
+* Offline Chrome App version ^_^
 
-* Improving gameplay balance
+* Maybe a couple of other tiny features?
+
+* Better mobile controls
 
 Things I might/plan on adding:
 
 * Worldwide leaderboards
 
-* Mobile version
-
 * Multiplayer (Co-op MMO version?)
+
+That stuff requires socket.io though so at the moment I'm a little hesitant. Seems like a bit too much of an effort for a school project. I'll have to decide later.
