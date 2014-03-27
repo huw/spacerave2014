@@ -83,7 +83,11 @@ $(document).ready(function(){
 
 	if (cWidth < cHeight) {
 		$('canvas').hide();
-		$('.message').text("Please rotate into landscape or make your window wider.");
+		if (isMobile.any) {
+			$('.message').text("Please rotate into landscape.");
+		} else {
+			$('.message').text("Please rotate into landscape or make your window wider.");
+		}
 	} else {
 		$('canvas').show();
 		$('.message').text("");
