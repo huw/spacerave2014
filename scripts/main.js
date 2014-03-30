@@ -683,15 +683,23 @@ $(document).ready(function(){
 
 		colour: "#FFF",
 		alpha: 0.5,
+		image: document.getElementById('arrow');
 
 		draw: function() {
 			canvas.globalAlpha = this.alpha;
-			canvas.fillStyle = this.colour;
 
-			canvas.fillRect(this.left.x, this.left.y, this.left.width, this.left.height);
-			canvas.fillRect(this.right.x, this.right.y, this.right.width, this.right.height);
-			canvas.fillRect(this.up.x, this.up.y, this.up.width, this.up.height);
-			canvas.fillRect(this.down.x, this.down.y, this.down.width, this.down.height);
+			canvas.drawImage(this.image, this.left.x, this.left.y, this.left.width, this.left.height);
+
+			canvas.rotate(90 * Math.PI / 180);
+			canvas.drawImage(this.image, this.down.x, this.down.y, this.down.width, this.down.height);
+
+			canvas.rotate(90 * Math.PI / 180);
+			canvas.drawImage(this.image, this.right.x, this.right.y, this.right.width, this.right.height);
+
+			canvas.rotate(90 * Math.PI / 180);
+			canvas.drawImage(this.image, this.up.x, this.up.y, this.up.width, this.up.height);
+
+			canvas.rotate(90 * Math.PI / 180);
 
 			canvas.globalAlpha = 1;
 		}
