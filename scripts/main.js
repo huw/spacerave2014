@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	/****** INITIAL DEFINITION *****/
-	var cWidth = window.innerWidth - 5;	// Make the canvas width most of the window size
-	var cHeight = window.innerHeight - 5;	// The extra five is so arrow keys don't scroll the document
+	var cWidth = window.innerWidth - 3;	// Make the canvas width most of the window size
+	var cHeight = window.innerHeight - 3;	// The extra one is so arrow keys don't scroll the document
 
 	function screenSize() {	// This function runs tests to change stuff when the window changes
 		window_focus = false;
@@ -34,7 +34,7 @@ $(document).ready(function(){
 			star.x = Math.random() * cWidth;
 		});
 
-		if (isMobile.any) {
+		if (isMobile) {
 			ship.width = cWidth * 0.04;
 		} else {
 			ship.width = cWidth * 0.025;
@@ -44,7 +44,7 @@ $(document).ready(function(){
 		ship.speed = cWidth * 0.006;
 
 		aliens.forEach(function(alien) {
-			if (isMobile.any) {
+			if (isMobile) {
 				alien.width = cWidth * 0.04;
 			} else {
 				alien.width = cWidth * 0.025;
@@ -83,7 +83,7 @@ $(document).ready(function(){
 
 	if (cWidth < cHeight) {
 		$('canvas').hide();
-		if (isMobile.any) {
+		if (isMobile) {
 			$('.message').text("Please rotate into landscape.");
 		} else {
 			$('.message').text("Please rotate into landscape or make your window wider.");
@@ -373,7 +373,7 @@ $(document).ready(function(){
     return 0;
 	}
 
-	if (isMobile.any) {	// Remove the top bar on some mobile browsers
+	if (isMobile) {	// Remove the top bar on some mobile browsers
 		window.scrollTo(0, 1);
 	}
 
@@ -407,7 +407,7 @@ $(document).ready(function(){
 	var xSpeedMod        = 1;
 	var bulletTimeout    = 350;
 
-	if (isMobile.any) {
+	if (isMobile) {
 		bulletWidth *= 4;
 		bulletHeight *= 4;
 		alienBulletWidth *= 4;
@@ -431,6 +431,7 @@ $(document).ready(function(){
 	}
 	var mouseDown = false;
 	var currentTouches = 0;
+	var isMobile = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
 
 	pushAlienRow();
 
@@ -511,7 +512,7 @@ $(document).ready(function(){
 	function Alien(i) {	// Alien class constructor
 		i.active = true;
 
-		if (isMobile.any) {
+		if (isMobile) {
 			i.width = cWidth * 0.04;
 		} else {
 			i.width = cWidth * 0.025;
@@ -564,7 +565,7 @@ $(document).ready(function(){
 		return i;
 	}
 
-	if (isMobile.any) {
+	if (isMobile) {
 		var shipWidth = cWidth * 0.04;
 	} else {
 		var shipWidth = cWidth * 0.025;
@@ -1101,7 +1102,7 @@ $(document).ready(function(){
 		canvas.fillStyle = "#F0F";
 		canvas.fillRect(0, 0, cWidth * (((elapsed + 330) % 330) / 330), 5);
 
-		if (isMobile.any) {
+		if (isMobile) {
 			arrow.draw();
 			button.draw();
 		}
@@ -1143,7 +1144,7 @@ $(document).ready(function(){
 		bulletTimeout       = 350;
 		gameMode            = "normal";
 
-		if (isMobile.any) {
+		if (isMobile) {
 			bulletWidth *= 4;
 			bulletHeight *= 4;
 			alienBulletWidth *= 4;
@@ -1245,7 +1246,7 @@ $(document).ready(function(){
 
 		canvas.font = (cWidth / 64) + "px PressStart2P";
 
-		if (isMobile.any) {
+		if (isMobile) {
 			if (!arrowsUsed) {	// Generate tutorial text. This one's pretty big, but very useful
 				if (!wasdUsed) {
 					if (!spaceUsed) {
