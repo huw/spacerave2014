@@ -768,13 +768,14 @@ $(document).ready(function(){
 				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
-					if (chrome) {
+					if (typeof chrome !== 'undefined') {
 						if (chrome.storage) {
-							console.log("storage works");
 							chrome.storage.sync.set({"highscore": score + 1});
 						} else {
-							createCookie("highscore", score + 1, "90");	// Improvements.
+							createCookie("highscore", score + 1, "90");
 						}
+					} else {
+						createCookie("highscore", score + 1, "90");	// Improvements.
 					}
 				}
 			}
@@ -1175,12 +1176,14 @@ $(document).ready(function(){
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
-		if (chrome){
+		if (typeof chrome !== 'undefined') {
 			if (chrome.storage) {
 				chrome.storage.sync.get('highscore', function(value){highScore = value.highscore||0;});
 			} else {
-				highScore = getCookie("highscore");	// Grabbin scores
+				highScore = getCookie("highscore");
 			}
+		} else {
+			highScore = getCookie("highscore");	// Grabbin scores
 		}
 
 		if (firstTry) {
