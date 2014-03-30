@@ -1251,7 +1251,7 @@ $(document).ready(function(){
 
 		canvas.font = (cWidth / 64) + "px PressStart2P";
 
-		if (isMobile) {
+		if (!isMobile) {
 			if (!arrowsUsed) {	// Generate tutorial text. This one's pretty big, but very useful
 				if (!wasdUsed) {
 					if (!spaceUsed) {
