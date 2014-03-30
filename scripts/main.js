@@ -660,46 +660,40 @@ $(document).ready(function(){
 			x: 30,
 			y: cHeight - 120,
 			width: 30,
-			height: 60
+			height: 60,
+			image: document.getElementById("arrowleft")
 		},
 		right: {
 			x: 120,
 			y: cHeight - 120,
 			width: 30,
-			height: 60
+			height: 60,
+			image: document.getElementById("arrowright")
 		},
 		up: {
 			x: 60,
 			y: cHeight - 150,
 			width: 60,
-			height: 30
+			height: 30,
+			image: document.getElementById("arrowup")
 		},
 		down: {
 			x: 60,
 			y: cHeight - 60,
 			width: 60,
-			height: 30
+			height: 30,
+			image: document.getElementById("arrowdown")
 		},
 
-		colour: "#FFF",
 		alpha: 0.5,
-		image: document.getElementById('arrow'),
 
 		draw: function() {
 			canvas.globalAlpha = this.alpha;
 
-			canvas.drawImage(this.image, this.left.x, this.left.y, this.left.width, this.left.height);
-
-			canvas.rotate(90 * Math.PI / 180);
-			canvas.drawImage(this.image, this.down.x, this.down.y, this.down.width, this.down.height);
-
-			canvas.rotate(90 * Math.PI / 180);
-			canvas.drawImage(this.image, this.right.x, this.right.y, this.right.width, this.right.height);
-
-			canvas.rotate(90 * Math.PI / 180);
-			canvas.drawImage(this.image, this.up.x, this.up.y, this.up.width, this.up.height);
-
-			canvas.rotate(90 * Math.PI / 180);
+			canvas.drawImage(this.left.image, this.left.x, this.left.y, this.left.width, this.left.height);
+			canvas.drawImage(this.down.image, this.down.x, this.down.y, this.down.width, this.down.height);
+			canvas.drawImage(this.right.image, this.right.x, this.right.y, this.right.width, this.right.height);
+			canvas.drawImage(this.up.image, this.up.x, this.up.y, this.up.width, this.up.height);
 
 			canvas.globalAlpha = 1;
 		}
@@ -710,13 +704,12 @@ $(document).ready(function(){
 		y: cHeight - 90,
 		width: 90,
 		height: 90,
-		colour: "#FFF",
+		image: document.getElementById("fire"),
 		alpha: 0.5,
 
 		draw: function() {
 			canvas.globalAlpha = this.alpha;
-			canvas.fillStyle = this.colour;
-			canvas.fillRect(this.x, this.y, this.width, this.height);
+			canvas.drawImage(this.image, this.x, this.y, this.width, this.height);
 			canvas.globalAlpha = 1;
 		}
 	}
@@ -775,11 +768,13 @@ $(document).ready(function(){
 				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
-					if (chrome.storage) {
-						console.log("storage works");
-						chrome.storage.sync.set({"highscore": score + 1});
-					} else {
-						createCookie("highscore", score + 1, "90");	// Improvements.
+					if (chrome) {
+						if (chrome.storage) {
+							console.log("storage works");
+							chrome.storage.sync.set({"highscore": score + 1});
+						} else {
+							createCookie("highscore", score + 1, "90");	// Improvements.
+						}
 					}
 				}
 			}
@@ -1180,10 +1175,12 @@ $(document).ready(function(){
 	function beginRave() {
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
-		if (chrome.storage) {
-			chrome.storage.sync.get('highscore', function(value){highScore = value.highscore||0;});
-		} else {
-			highScore = getCookie("highscore");	// Grabbin scores
+		if (chrome){
+			if (chrome.storage) {
+				chrome.storage.sync.get('highscore', function(value){highScore = value.highscore||0;});
+			} else {
+				highScore = getCookie("highscore");	// Grabbin scores
+			}
 		}
 
 		if (firstTry) {
