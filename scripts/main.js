@@ -661,14 +661,14 @@ $(document).ready(function(){
 			y: cHeight - 120,
 			width: 30,
 			height: 60,
-			image: document.getElementById("arrowleft")
+			image: document.getElementById("arrowright")
 		},
 		right: {
 			x: 120,
 			y: cHeight - 120,
 			width: 30,
 			height: 60,
-			image: document.getElementById("arrowright")
+			image: document.getElementById("arrowleft")
 		},
 		up: {
 			x: 60,
