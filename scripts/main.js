@@ -655,7 +655,7 @@ $(document).ready(function(){
 		}));
 	}
 
-	var arrow = {
+	var arrow = {	// Here we define the arrows which show up on mobiles
 		left: {
 			x: 30,
 			y: cHeight - 120,
@@ -699,7 +699,7 @@ $(document).ready(function(){
 		}
 	}
 
-	var button = {
+	var button = {	// This is the fire button on mobiles
 		x: cWidth - 90,
 		y: cHeight - 90,
 		width: 90,
@@ -768,9 +768,9 @@ $(document).ready(function(){
 				bgMusic.currentTime = 0;
 
 				if (score > highScore) {
-					if (typeof chrome !== 'undefined') {
+					if (typeof chrome !== 'undefined') {	// If we're in a chrome app
 						if (chrome.storage) {
-							chrome.storage.sync.set({"highscore": score + 1});
+							chrome.storage.sync.set({"highscore": score + 1});	// Save the highscore using chromes method
 						} else {
 							createCookie("highscore", score + 1, "90");
 						}
