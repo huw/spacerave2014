@@ -683,7 +683,7 @@ $(document).ready(function(){
 
 		colour: "#FFF",
 		alpha: 0.5,
-		image: document.getElementById('arrow');
+		image: document.getElementById('arrow'),
 
 		draw: function() {
 			canvas.globalAlpha = this.alpha;
