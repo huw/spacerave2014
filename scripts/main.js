@@ -193,7 +193,7 @@ $(document).ready(function(){
 			}
 
 			var chooseNumber = function() {
-				option = Math.floor(Math.random() * 10);	// Choose a random number
+				option = Math.floor(Math.random() * 11);	// Choose a random number
 			}
 
 			chooseNumber();
@@ -315,6 +315,11 @@ $(document).ready(function(){
 					allStar.currentTime = 0;
 
 					alertText = "SPACE SWAMP INCOMING!";
+					break;
+				case 10:
+					bulletTimeout = 87.5;
+
+					alertText = "RAPID FIRE!";
 					break;
 				default:
 					alertText = "NO BONUS.";	// This is just to make people sad
