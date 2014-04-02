@@ -1118,7 +1118,7 @@ $(document).ready(function(){
 	}
 
 	function resetGame() {
-		bgAlpha = "1";
+		bgAlpha = "3";
 		canvas.clearRect(0, 0, cWidth, cHeight);
 
 		ship.x     = cWidth / 2;	// We must rebuild him!
