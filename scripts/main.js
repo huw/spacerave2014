@@ -212,7 +212,7 @@ $(document).ready(function(){
 
 			switch(option) {	// Do something depending on the random number
 				case 0:
-					bgAlpha = (parseInt(bgAlpha, 16) + 1).toString(16);	// This one raises a base 16 number by 1
+					bgAlpha = (parseInt(bgAlpha, 16) + 2).toString(16);	// This one raises a base 16 number by 1
 					alertText = "PARTY HARDER!";
 					break;
 				case 1:
@@ -401,7 +401,7 @@ $(document).ready(function(){
 	var spaceUsed  = false;
 	var clickUsed  = false;
 
-	var bgAlpha = "1";
+	var bgAlpha = "3";
 
 	var bulletSpeed      = Math.floor(cHeight * 0.025);	// The speed is based on the height so users with tall screens have no advantage
 	var alienBulletSpeed = Math.floor(cHeight * 0.006);
