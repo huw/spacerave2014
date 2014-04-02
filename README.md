@@ -17,20 +17,3 @@ All instructions are included when you start the game, but if you need a refresh
 ##Gameplay
 Gameplay is simple. You start out with infinite waves of aliens slowly advancing towards you while you try to kill as many as you can. Score is based on time alive.
 Every ~3 seconds, the Wheel of Spin is activated. This chooses a random gameplay modifier to apply. These include movement speed and background intensity.
-
-##The Future
-Things I will add:
-
-* Offline Chrome App version ^_^
-
-* Maybe a couple of other tiny features?
-
-* Better mobile controls
-
-Things I might/plan on adding:
-
-* Worldwide leaderboards
-
-* Multiplayer (Co-op MMO version?)
-
-That stuff requires socket.io though so at the moment I'm a little hesitant. Seems like a bit too much of an effort for a school project. I'll have to decide later.
